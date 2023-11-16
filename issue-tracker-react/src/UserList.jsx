@@ -1,13 +1,21 @@
 import { nanoid } from 'nanoid';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import UserSummary from './UserSummary.jsx';
 import UserEditor from './UserEditor.jsx';
+import axios from 'axios';
 
 export default function UserList() {
-  const [users, setUsers] = useState([
-    { id: nanoid(), editMode: false, email: 'example@admin.com', password: 'password', givenName: 'Admin', familyName: 'User', fullName: 'Admin User' },
-    { id: nanoid(), editMode: false, email: 'jaggedbrace@hotmail.com', password: 'password', givenName: 'Jagged', familyName: 'Brace', fullName: 'Jagged Brace' },
-  ]);
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    axios.get('http://localhost:5000/api/bugs/list', { withCredentials: true })
+      .then(response => {
+        setUsers(response.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, []);
 
   const [newUser, setNewUser] = useState({ id: nanoid(), editMode: false, email: '', password: '', givenName: '', familyName: '', fullName: '' });
 
@@ -32,21 +40,46 @@ export default function UserList() {
     setUsers(newUsers);
   }
 
+  function onUpdateUser(updateUser) {
+    const newUsers = [...users];
+    for (let index = 0; index < newUsers.length; index++) {
+      if (newUsers[index].id === updateUser.id) {
+        newUsers[index].givenName = updateUser.givenName;
+        newUsers[index].familyName = updateUser.familyName;
+        newUsers[index].fullName = updateUser.fullName;
+        newUsers[index].password = updateUser.password;
+        newUsers[index].editMode = false;
+        setUsers(newUsers);
+      }
+    }
+  }
   return (
     <>
       <div className='container'>
-        <span className='display-3 text-primary me-4'>User List</span>
-        <span className='fs-3 mb-4 badge rounded-circle text-bg-warning'>{users.length}</span>
-        <br />
-        {users.map(user =>
+        {!users.length
+          ? <h2 className='display-2'>No users to display</h2> :
           <>
-            <div className='d-inline'>
-              <UserSummary user={user} key={user.id} />
-              <button className='btn btn-warning btn-sm mx-1 mb-3' onClick={() => onEditUser(user)} >Edit User</button>
-              <button className='btn btn-danger btn-sm mx-1 mb-3' onClick={() => onDeleteUser(user)} >Remove User</button>
-            </div>
+            <span className='display-3 text-primary me-4'>User List</span>
+            <span className='fs-3 mb-4 badge rounded-circle text-bg-warning'>{users.length}</span>
+            <br />
+            {users.map(user =>
+              <>
+                {user.editMode
+                  ?
+                  <>
+                    <UserEditor user={user} key={user.id} onUpdateUser={(evt) => onUpdateUser(evt, user)} />
+                  </>
+                  :
+                  <div className='d-inline'>
+                    <UserSummary user={user} key={user.id} />
+                    <button className='btn btn-warning btn-sm mx-1 mb-3' onClick={() => onEditUser(user)} >Edit User</button>
+                    <button className='btn btn-danger btn-sm mx-1 mb-3' onClick={() => onDeleteUser(user)} >Remove User</button>
+                  </div>
+                }
+              </>
+            )}
           </>
-        )}
+        }
 
         <div className="card col-4 mx-1">
           <div className="card-body">

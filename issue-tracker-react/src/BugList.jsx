@@ -1,16 +1,23 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { nanoid } from 'nanoid';
 import BugSummary from './BugSummary.jsx';
 import BugEditor from './BugEditor.jsx';
+import axios from 'axios';
 
 export default function BugList() {
+  const [bugs, setBugs] = useState([]);
 
-  const [bugs, setBugs] = useState([{ id: nanoid(), editMode: false, title: 'Bug 1', description: 'This is a bug', stepsToReproduce: 'Click a button' },
-  { id: nanoid(), editMode: false, title: 'Bug 2', description: 'This is another bug', stepsToReproduce: 'Click a button' },
-  { id: nanoid(), editMode: false, title: 'Bug 3', description: 'This is a third bug', stepsToReproduce: 'Click a button' }
-  ]);
+  useEffect(() => {
+    axios.get('http://localhost:5000/api/bugs/list', { withCredentials: true })
+      .then(response => {
+        setBugs(response.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, []);
 
-  const [newBug, setNewBug] = useState({ id: nanoid(), title: '', description: '', stepsToReproduce: '' });
+  const [newBug, setNewBug] = useState({ id: nanoid(), editMode: false, title: '', description: '', stepsToReproduce: '' });
 
   function onAddBug() {
     const newBugs = [...bugs];
@@ -36,38 +43,43 @@ export default function BugList() {
   function onUpdateBug(updateBug) {
     const newBugs = [...bugs];
     for (let index = 0; index < newBugs.length; index++) {
-     if(newBugs[index].id === updateBug.id){
-      newBugs[index].title = updateBug.title;
-      newBugs[index].description = updateBug.description;
-      newBugs[index].stepsToReproduce = updateBug.stepsToReproduce;
-      newBugs[index].editMode = false;
-      setBugs(newBugs);
-    }
+      if (newBugs[index].id === updateBug.id) {
+        newBugs[index].title = updateBug.title;
+        newBugs[index].description = updateBug.description;
+        newBugs[index].stepsToReproduce = updateBug.stepsToReproduce;
+        newBugs[index].editMode = false;
+        setBugs(newBugs);
+      }
     }
   }
 
   return (
     <>
       <div className='container'>
-        <span className='display-3 text-primary me-4'>Bug List</span>
-        <span className='fs-3 mb-4 badge rounded-circle text-bg-warning'>{bugs.length}</span>
-        <br />
-        {bugs.map(bug =>
+        {!bugs.length
+          ? <h2 className='display-2'>No bugs to display</h2> :
           <>
-            {bug.editMode
-              ?
+            <span className='display-3 text-primary me-4'>Bug List</span>
+            <span className='fs-3 mb-4 badge rounded-circle text-bg-warning'>{bugs.length}</span>
+            <br />
+            {bugs.map(bug =>
               <>
-                <BugEditor bug={bug} key={bug.id} onUpdateTitle={(evt) => onUpdateTitle(evt, bug)} onUpdateBug={(evt) => onUpdateBug(evt, bug)} />
+                {bug.editMode
+                  ?
+                  <>
+                    <BugEditor bug={bug} key={bug.id} onUpdateBug={(evt) => onUpdateBug(evt, bug)} />
+                  </>
+                  :
+                  <div className='display-inline'>
+                    <BugSummary bug={bug} key={bug.id} />
+                    <button className='btn btn-warning btn-sm mx-1 mb-3' onClick={() => onEditBug(bug)} >Edit Bug</button>
+                    <button className='btn btn-danger btn-sm mx-1 mb-3' onClick={() => onDeleteBug(bug)} >Remove Bug</button>
+                  </div>
+                }
               </>
-              :
-              <div className='display-inline'>
-                <BugSummary bug={bug} key={bug.id} />
-                <button className='btn btn-warning btn-sm mx-1 mb-3' onClick={() => onEditBug(bug)} >Edit Bug</button>
-                <button className='btn btn-danger btn-sm mx-1 mb-3' onClick={() => onDeleteBug(bug)} >Remove Bug</button>
-              </div>}
+            )}
           </>
-        )}
-
+        }
         <div className="card col-4 mx-1">
           <div className="card-body">
             <label htmlFor="txtBugTitle" className='form-label'>Title:</label>
