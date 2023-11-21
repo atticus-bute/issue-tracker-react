@@ -3,23 +3,14 @@ import { nanoid } from 'nanoid';
 import BugSummary from './BugSummary.jsx';
 import BugEditor from './BugEditor.jsx';
 import axios from 'axios';
+import { Link, NavLink } from 'react-router-dom';
 
-export default function BugList() {
+export default function BugList({ showToast }) {
   const [bugs, setBugs] = useState([]);
-
-  useEffect(() => {
-    axios.get('http://localhost:5000/api/bugs/list', { withCredentials: true })
-      .then(response => {
-        setBugs(response.data);
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  }, []);
-
   const [newBug, setNewBug] = useState({ id: nanoid(), editMode: false, title: '', description: '', stepsToReproduce: '' });
 
   function onAddBug() {
+    showToast('Bug added successfully', 'success');
     const newBugs = [...bugs];
     newBugs.push(newBug);
     setBugs(newBugs);
@@ -52,7 +43,17 @@ export default function BugList() {
       }
     }
   }
-
+  useEffect(() => {
+    axios.get(`${import.meta.env.VITE_API_URL}/api/bugs/list`, { withCredentials: true })
+      .then(response => {
+        console.log('Getting bugs');
+        setBugs(response.data);
+      })
+      .catch(error => {
+        console.log('Error getting bugs');
+        console.log(error);
+      });
+  }, []);
   return (
     <>
       <div className='container'>

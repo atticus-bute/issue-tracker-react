@@ -4,42 +4,37 @@ import UserSummary from './UserSummary.jsx';
 import UserEditor from './UserEditor.jsx';
 import axios from 'axios';
 
-export default function UserList() {
+export default function UserList({ showToast }) {
   const [users, setUsers] = useState([]);
-
-  useEffect(() => {
-    axios.get('http://localhost:5000/api/bugs/list', { withCredentials: true })
-      .then(response => {
-        setUsers(response.data);
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  }, []);
-
   const [newUser, setNewUser] = useState({ id: nanoid(), editMode: false, email: '', password: '', givenName: '', familyName: '', fullName: '' });
-
+  const [deleteCounter, setDeleteCounter] = useState(0);
+  
   function onAddUser() {
     const newUsers = [...users];
     newUsers.push(newUser);
     setUsers(newUsers);
     setNewUser({ id: nanoid(), email: '', password: '', givenName: '', familyName: '', fullName: '' });
+    showToast('User added successfully', 'success');
   }
 
-  function onDeleteUser(user) {
-    const newUsers = [...users];
-    const index = newUsers.indexOf(user);
-    newUsers.splice(index, 1);
+  function onDeleteUser(evt, userId) {
+    // evt.preventDefault();
+    axios.delete(`${import.meta.env.VITE_API_URL}/api/users/${userId}`, { withCredentials: true })
+    .then(response => {
+        setDeleteCounter(prevCount => prevCount + 1);
+        showToast('User deleted successfully', 'success');
+        console.log(response.data)
+      })
+      .catch(error => console.log(error));
+    }
+    
+    function onEditUser(user) {
+      const newUsers = [...users];
+      const index = newUsers.indexOf(user);
+      newUsers[index].editMode = true;
     setUsers(newUsers);
   }
-
-  function onEditUser(user) {
-    const newUsers = [...users];
-    const index = newUsers.indexOf(user);
-    newUsers[index].editMode = true;
-    setUsers(newUsers);
-  }
-
+  
   function onUpdateUser(updateUser) {
     const newUsers = [...users];
     for (let index = 0; index < newUsers.length; index++) {
@@ -53,6 +48,15 @@ export default function UserList() {
       }
     }
   }
+  useEffect(() => {
+    axios.get(`${import.meta.env.VITE_API_URL}/api/users/list`, { withCredentials: true })
+      .then(response => {
+        setUsers(response.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, [deleteCounter]);
   return (
     <>
       <div className='container'>
@@ -71,9 +75,7 @@ export default function UserList() {
                   </>
                   :
                   <div className='d-inline'>
-                    <UserSummary user={user} key={user.id} />
-                    <button className='btn btn-warning btn-sm mx-1 mb-3' onClick={() => onEditUser(user)} >Edit User</button>
-                    <button className='btn btn-danger btn-sm mx-1 mb-3' onClick={() => onDeleteUser(user)} >Remove User</button>
+                    <UserSummary user={user} key={user.id} onDeleteUser={onDeleteUser}/>
                   </div>
                 }
               </>

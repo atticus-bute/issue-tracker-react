@@ -1,72 +1,83 @@
 import { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import { Route, Routes, NavLink } from 'react-router-dom';
+import { Route, Routes, NavLink, useNavigate } from 'react-router-dom';
 import LoginForm from './LoginForm.jsx';
 import RegisterForm from './RegisterForm.jsx';
 import BugList from './BugList.jsx';
 import UserList from './UserList.jsx';
+import NavBar from './NavBar.jsx';
+import Footer from './Footer.jsx';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const [screen, setScreen] = useState('home');
-  const [login, setLogin] = useState(false);
-
+  const [loggedIn, setLoggedIn] = useState();
   const [auth, setAuth] = useState(null);
-  
-useEffect(() => {
-  if(localStorage) {
-    const auth = localStorage.getItem('auth');
-    if(auth) {
-      setAuth(JSON.parse(auth));
-    }
-  }
-}, []);
+  const navigate = useNavigate();
 
-  function onLogin(auth) {
-    setAuth(auth);
+  useEffect(() => {
+    if (localStorage) {
+      const auth = localStorage.getItem('auth');
+      if (auth) {
+        setAuth(JSON.parse(auth));
+        console.log(auth);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    const loggedInEmail = localStorage.getItem('loggedIn');
+    if (loggedInEmail) {
+      setLoggedIn(loggedInEmail);
+    }
+  }, []);
+
+  function showToast(message, type) {
+    toast(message, {
+      type: type,
+      position: 'bottom-right',
+      autoClose: 2500,
+      closeOnClick: true,
+    });
   }
+
+  function onLogin(auth, response) {
+    setAuth(auth);
+    setLoggedIn(response.data.email);
+    localStorage.setItem('loggedIn', response.data.email);
+    navigate('/bugs/list');
+    showToast('Login successful', 'success');
+  }
+
+  function onLogout() {
+    setAuth(null);
+    setLoggedIn();
+    localStorage.removeItem('loggedIn');
+    navigate('/login');
+    showToast('Logout successful', 'success');
+  }
+
   return (
     <>
       <header>
-        <nav className="navbar navbar-expand-lg bg-success-subtle">
-          <div className="container-fluid">
-            <NavLink className="navbar-brand" to="/">Bug Tracker</NavLink>
-            <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-              <span className="navbar-toggler-icon"></span>
-            </button>
-            <div className="collapse navbar-collapse" id="navbarNav">
-              <ul className="navbar-nav">
-                <li className="nav-item">
-                  <NavLink className="nav-link" to="/bugs">Bugs</NavLink>
-                </li>
-                <li className="nav-item">
-                  <NavLink className="nav-link" to="/users">Users</NavLink>
-                </li>
-                <li className="nav-item">
-                  <NavLink className="nav-link" to='/login'>Login</NavLink>
-                </li>
-                <li className="nav-item">
-                  <NavLink className="nav-link" to='/register'>Register</NavLink>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </nav>
+        <NavBar loggedIn={loggedIn} onLogout={onLogout} />
       </header>
       <main className='flex-grow-1 bg-success-subtle'>
         <Routes>
-          <Route path="/" element={<span className='display-5'>home</span>} />
+          <Route path="/" element={loggedIn ?
+            <span className='display-5'>Welcome, {loggedIn}!</span> :
+            <span className='display-5'>Please Login</span>
+          } />
           <Route path="/bugs" element={<BugList />} />
-          <Route path="/users" element={<UserList />} />
-          <Route path="/login" element={<LoginForm />} onLogin={onLogin} />
+          <Route path="/users" element={<UserList showToast={showToast} />} />
+          <Route path="/login" element={<LoginForm onLogin={onLogin}/>} />
           <Route path="/register" element={<RegisterForm />} />
         </Routes>
+        <ToastContainer />
       </main>
-      <footer>
-        <div className="container-fluid bg-success-subtle text-center p-3">
-          <span className="text-dark">Bute, 2023</span>
-        </div>
-      </footer>
+      <Footer/>
     </>
   );
 }
