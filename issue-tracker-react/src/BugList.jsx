@@ -8,6 +8,7 @@ import { Link, NavLink } from 'react-router-dom';
 export default function BugList({ showToast }) {
   const [bugs, setBugs] = useState([]);
   const [newBug, setNewBug] = useState({ id: nanoid(), editMode: false, title: '', description: '', stepsToReproduce: '' });
+  const [updateCounter, setUpdateCounter] = useState(0);
 
   function onAddBug() {
     showToast('Bug added successfully', 'success');
@@ -17,32 +18,15 @@ export default function BugList({ showToast }) {
     setNewBug({ id: nanoid(), title: '', description: '', stepsToReproduce: '' });
   }
 
-  function onDeleteBug(bug) {
-    const newBugs = [...bugs];
-    const index = newBugs.indexOf(bug);
-    newBugs.splice(index, 1);
-    setBugs(newBugs);
-  }
-
-  function onEditBug(bug) {
-    const newBugs = [...bugs];
-    const index = newBugs.indexOf(bug);
-    newBugs[index].editMode = true;
-    setBugs(newBugs);
-  }
-
-  function onUpdateBug(updateBug) {
-    const newBugs = [...bugs];
-    for (let index = 0; index < newBugs.length; index++) {
-      if (newBugs[index].id === updateBug.id) {
-        newBugs[index].title = updateBug.title;
-        newBugs[index].description = updateBug.description;
-        newBugs[index].stepsToReproduce = updateBug.stepsToReproduce;
-        newBugs[index].editMode = false;
-        setBugs(newBugs);
-      }
+  function addEditMode(budId) {
+    if (bugs.length) {
+      const newBugs = [...bugs];
+      const bugIndex = newBugs.findIndex(bug => bug._id === budId);
+      newBugs[bugIndex].editMode = true;
+      setBugs(newBugs);
     }
   }
+
   useEffect(() => {
     axios.get(`${import.meta.env.VITE_API_URL}/api/bugs/list`, { withCredentials: true })
       .then(response => {
@@ -68,13 +52,11 @@ export default function BugList({ showToast }) {
                 {bug.editMode
                   ?
                   <>
-                    <BugEditor bug={bug} key={bug.id} onUpdateBug={(evt) => onUpdateBug(evt, bug)} />
+                    <BugEditor bug={bug} key={bug.id} />
                   </>
                   :
                   <div className='display-inline'>
-                    <BugSummary bug={bug} key={bug.id} />
-                    <button className='btn btn-warning btn-sm mx-1 mb-3' onClick={() => onEditBug(bug)} >Edit Bug</button>
-                    <button className='btn btn-danger btn-sm mx-1 mb-3' onClick={() => onDeleteBug(bug)} >Remove Bug</button>
+                    <BugSummary bug={bug} addEditMode={addEditMode} key={bug.id}  />
                   </div>
                 }
               </>

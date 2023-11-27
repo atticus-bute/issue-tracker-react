@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, NavLink } from 'react-router-dom';
 
 export default function LoginForm({ onLogin }) {
 
@@ -16,8 +16,8 @@ export default function LoginForm({ onLogin }) {
 
   const passwordError = !password
     ? 'Password is required'
-    : password.length < 5
-      ? 'Password must be at least 5 characters'
+    : password.length < 7
+      ? 'Password must be at least 7 characters'
       : '';
 
   const navigate = useNavigate();
@@ -55,16 +55,22 @@ export default function LoginForm({ onLogin }) {
   }
   return (
     <>
-      <div className='col-4'></div>
-      <div className="col-4">
-        <label htmlFor="txtEmail" className="form-label">Email:</label>
-        <input type="text" className='form-control' name="emailField" id='txtEmail' onChange={(evt) => setEmail(evt.target.value)} />
-        <label htmlFor="txtPassword" className="form-label">Password:</label>
-        <input type="password" className='form-control' name="passwordField" id='txtPassword' onChange={(evt) => setPassword(evt.target.value)} />
-        <button type="button" className="btn btn-success mt-1" onClick={(evt) => onSubmitLogin(evt)} >Login</button>
-      </div>
-      <div className='col-4 mt-2'>
-        {error && <div className='alert alert-danger' role='alert'>{error}</div>}
+      <div className='row mt-5'>
+        <div className='col-4'></div>
+        <div className="col-4">
+          {error && <div className='alert alert-danger' role='alert'>{error}</div>}
+          <form action="">
+            <label htmlFor="txtEmail" className="form-label">Email:</label>
+            <input type="text" className='form-control' name="emailField" id='txtEmail' onChange={(evt) => setEmail(evt.target.value)} />
+            <label htmlFor="txtPassword" className="form-label">Password:</label>
+            <input type="password" className='form-control' name="passwordField" id='txtPassword' onChange={(evt) => setPassword(evt.target.value)} />
+            <button type="button" className="btn btn-success mt-1" onClick={(evt) => onSubmitLogin(evt)} >Login</button>
+          </form>
+        </div>
+        <div className='col-4 mt-2'>
+        </div>
+        <span className='text-center'>New User?</span>
+        <NavLink className="text-center" to="/register">Register Here.</NavLink>
       </div>
     </>
   );

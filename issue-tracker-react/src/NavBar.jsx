@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import axios from 'axios';
 
-export default function NavBar({ loggedIn, onLogout }) {
+export default function NavBar({ auth, onLogout }) {
 
   function onClickLogout(evt) {
     evt.preventDefault();
@@ -23,7 +23,7 @@ export default function NavBar({ loggedIn, onLogout }) {
           </button>
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav">
-              {loggedIn &&
+              {auth &&
                 <>
                   <li className="nav-item">
                     <NavLink className="nav-link" to="/bugs">Bugs</NavLink>
@@ -32,7 +32,7 @@ export default function NavBar({ loggedIn, onLogout }) {
                     <NavLink className="nav-link" to="/users">Users</NavLink>
                   </li>
                 </>}
-              {!loggedIn &&
+              {!auth &&
                 <>
                   <li className="nav-item">
                     <NavLink className="nav-link" to='/login'>Login</NavLink>
@@ -42,11 +42,11 @@ export default function NavBar({ loggedIn, onLogout }) {
                   </li>
                 </>
               }
-              {loggedIn &&
+              {auth &&
                 <>
                   <div className="nav-item-group">
                     <li className="nav-item">
-                      <NavLink className="nav-link" to="/profile">{loggedIn}</NavLink>
+                      <NavLink className="nav-link" to="/profile">{auth.email}</NavLink>
                     </li>
                     <li className="nav-item">
                       <button className="nav-link" to="/logout" onClick={(evt) => onClickLogout(evt)}>Logout</button>

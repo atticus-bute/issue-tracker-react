@@ -1,5 +1,5 @@
 import { useState } from 'react';
-export default function BugEditor({bug, onUpdateBug}) {
+export default function BugEditor({ bug }) {
 const [editBug, setEditBug] = useState(bug);
 
 function updateTitle(evt) {
@@ -18,6 +18,10 @@ function updateStepsToReproduce(evt) {
   setEditBug(newBug);
 }
 
+function onClickEdit(bug) {
+  bug.editMode = true;
+}
+
   return(
     <>
       <div className="card col-2 m-1">
@@ -28,7 +32,7 @@ function updateStepsToReproduce(evt) {
           <input type="text" className='form-control' name='txtBugDescription' value={editBug.description} onChange={(evt) => updateDescription(evt)}/>
           <label htmlFor="txtBugSteps" className='form-label'>Steps to Reproduce:</label>
           <input type="text" className='form-control' name='txtBugSteps' value={editBug.stepsToReproduce} onChange={(evt) => updateStepsToReproduce(evt)}/>
-          <button onClick={(evt) => onUpdateBug(editBug)} className='mt-1 btn btn-success'>Save Bug</button>
+          <button className='mt-1 btn btn-success'>Save Bug</button>
         </div>
       </div>
     </>
