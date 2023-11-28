@@ -5,7 +5,7 @@ import BugEditor from './BugEditor.jsx';
 import axios from 'axios';
 import { Link, NavLink } from 'react-router-dom';
 
-export default function BugList({ showToast }) {
+export default function BugList({ auth, showToast }) {
   const [bugs, setBugs] = useState([]);
   const [newBug, setNewBug] = useState({ id: nanoid(), editMode: false, title: '', description: '', stepsToReproduce: '' });
   const [updateCounter, setUpdateCounter] = useState(0);

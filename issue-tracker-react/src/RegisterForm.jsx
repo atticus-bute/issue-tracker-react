@@ -71,9 +71,9 @@ export default function LoginForm({ onLogin }) {
         <div className="col-4">
         {error && <div className='alert alert-danger' role='alert'>{error}</div>}
           <label htmlFor="txtEmail" className="form-label">Email:</label>
-          <input type="text" className='form-control' name="emailField" id='txtEmail' onChange={(evt) => setEmail(evt.target.value)} />
+          <input type="email" autoFocus='true' className='form-control' name="emailField" id='txtEmail' onChange={(evt) => setEmail(evt.target.value)} />
           <label htmlFor="txtEmailConfirm" className="form-label">Confirm Email:</label>
-          <input type="text" className='form-control' name="emailConfirmField" id='txtEmailConfirm' onChange={(evt) => setEmailConfirm(evt.target.value)} />
+          <input type="email" className='form-control' name="emailConfirmField" id='txtEmailConfirm' onChange={(evt) => setEmailConfirm(evt.target.value)} />
           <label htmlFor="txtPassword" className="form-label">Password:</label>
           <input type="password" className='form-control' name="passwordField" id='txtPassword' onChange={(evt) => setPassword(evt.target.value)} />
           <label htmlFor="txtPasswordConfirm" className="form-label">Confirm Password:</label>

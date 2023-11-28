@@ -56,7 +56,7 @@ function App() {
     }
     if (now.getTime() > currentUser.expiration) {
       axios.post(`${import.meta.env.VITE_API_URL}/api/users/logout`, {}, { withCredentials: true })
-      .then(response => {
+      .then(() => {
         onLogout();
       })
       return;
@@ -78,8 +78,8 @@ function App() {
             <span className='display-5'>Welcome, {auth.fullName}!</span> :
             <span className='display-5'>Please Login</span>
           } />
-          <Route path="/bugs" element={<BugList />} />
-          <Route path="/users" element={<UserList showToast={showToast} />} />
+          <Route path="/bugs" element={<BugList auth={auth} showToast={showToast}/>} />
+          <Route path="/users" element={<UserList auth={auth} showToast={showToast}/>} />
           <Route path="/login" element={<LoginForm onLogin={onLogin} />} />
           <Route path="/register" element={<RegisterForm onLogin={onLogin}/>} />
         </Routes>
