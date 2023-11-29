@@ -11,6 +11,10 @@ import NavBar from './NavBar.jsx';
 import Footer from './Footer.jsx';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import BugListItem from './BugListItem.jsx';
+import BugSummary from './BugSummary.jsx';
+import BugEditor from './BugEditor.jsx';
+import UserEditor from './UserEditor.jsx';
 
 function App() {
   const [auth, setAuth] = useState(null);
@@ -82,6 +86,10 @@ function App() {
           <Route path="/users" element={<UserList auth={auth} showToast={showToast}/>} />
           <Route path="/login" element={<LoginForm onLogin={onLogin} />} />
           <Route path="/register" element={<RegisterForm onLogin={onLogin}/>} />
+          <Route path="/bug/:bugId" element={<BugSummary/>} />
+          <Route path="/user/:userId" element={<h1>User Summary</h1>} />
+          <Route path="/bug/:bugId/edit" element={<BugEditor/>} showToast={showToast} />
+          <Route path="/user/:userId/edit" element={<UserEditor/>} />
         </Routes>
         <ToastContainer />
       </main>

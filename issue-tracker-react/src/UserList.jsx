@@ -1,6 +1,6 @@
 import { nanoid } from 'nanoid';
 import { useState, useEffect } from 'react';
-import UserSummary from './UserSummary.jsx';
+import UserListItem from './UserListItem.jsx';
 import UserEditor from './UserEditor.jsx';
 import axios from 'axios';
 
@@ -8,7 +8,7 @@ export default function UserList({ showToast }) {
   const [users, setUsers] = useState([]);
   const [newUser, setNewUser] = useState({ id: nanoid(), editMode: false, email: '', password: '', givenName: '', familyName: '', fullName: '' });
   const [deleteCounter, setDeleteCounter] = useState(0);
-  
+
   function onAddUser() {
     const newUsers = [...users];
     newUsers.push(newUser);
@@ -20,34 +20,14 @@ export default function UserList({ showToast }) {
   function onDeleteUser(evt, userId) {
     // evt.preventDefault();
     axios.delete(`${import.meta.env.VITE_API_URL}/api/users/${userId}`, { withCredentials: true })
-    .then(response => {
+      .then(response => {
         setDeleteCounter(prevCount => prevCount + 1);
         showToast('User deleted successfully', 'success');
         console.log(response.data)
       })
       .catch(error => console.log(error));
-    }
-    
-    function onEditUser(user) {
-      const newUsers = [...users];
-      const index = newUsers.indexOf(user);
-      newUsers[index].editMode = true;
-    setUsers(newUsers);
   }
-  
-  function onUpdateUser(updateUser) {
-    const newUsers = [...users];
-    for (let index = 0; index < newUsers.length; index++) {
-      if (newUsers[index].id === updateUser.id) {
-        newUsers[index].givenName = updateUser.givenName;
-        newUsers[index].familyName = updateUser.familyName;
-        newUsers[index].fullName = updateUser.fullName;
-        newUsers[index].password = updateUser.password;
-        newUsers[index].editMode = false;
-        setUsers(newUsers);
-      }
-    }
-  }
+
   useEffect(() => {
     axios.get(`${import.meta.env.VITE_API_URL}/api/users/list`, { withCredentials: true })
       .then(response => {
@@ -75,7 +55,7 @@ export default function UserList({ showToast }) {
                   </>
                   :
                   <div className='d-inline'>
-                    <UserSummary user={user} key={user.id} onDeleteUser={onDeleteUser}/>
+                    <UserListItem user={user} key={user.id} onDeleteUser={onDeleteUser} />
                   </div>
                 }
               </>

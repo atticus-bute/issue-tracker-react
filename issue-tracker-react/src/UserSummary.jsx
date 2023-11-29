@@ -1,6 +1,18 @@
-import { useState } from 'react';
-export default function UserSummary({ user, onDeleteUser }) {
-  //const [user, setUser] = useState({email: 'admin@example.com', password: 'password', givenName: 'Admin', familyName: 'User' })
+import { Link, useParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import moment from 'moment';
+import axios from 'axios';
+export default function UserSummary() {
+  const { userId } = useParams();
+  const [user, setUser] = useState({});
+
+  useEffect(() => {
+    axios.get(`${import.meta.env.VITE_API_URL}/api/users/${userId}`, { withCredentials: true })
+      .then(response => {
+        setUser(response.data);
+      })
+      .catch(error => { console.log(error) });
+  }, []);
   return (
     <>
       <div className="card col-2 m-1">

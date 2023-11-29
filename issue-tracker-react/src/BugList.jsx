@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react';
 import { nanoid } from 'nanoid';
-import BugSummary from './BugSummary.jsx';
+import BugListItem from './BugListItem.jsx';
 import BugEditor from './BugEditor.jsx';
 import axios from 'axios';
-import { Link, NavLink } from 'react-router-dom';
 
 export default function BugList({ auth, showToast }) {
   const [bugs, setBugs] = useState([]);
   const [newBug, setNewBug] = useState({ id: nanoid(), editMode: false, title: '', description: '', stepsToReproduce: '' });
-  const [updateCounter, setUpdateCounter] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   function onAddBug() {
     showToast('Bug added successfully', 'success');
@@ -18,16 +17,8 @@ export default function BugList({ auth, showToast }) {
     setNewBug({ id: nanoid(), title: '', description: '', stepsToReproduce: '' });
   }
 
-  function addEditMode(budId) {
-    if (bugs.length) {
-      const newBugs = [...bugs];
-      const bugIndex = newBugs.findIndex(bug => bug._id === budId);
-      newBugs[bugIndex].editMode = true;
-      setBugs(newBugs);
-    }
-  }
-
   useEffect(() => {
+    setLoading(true);
     axios.get(`${import.meta.env.VITE_API_URL}/api/bugs/list`, { withCredentials: true })
       .then(response => {
         console.log('Getting bugs');
@@ -36,16 +27,23 @@ export default function BugList({ auth, showToast }) {
       .catch(error => {
         console.log('Error getting bugs');
         console.log(error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, []);
+
   return (
     <>
       <div className='container'>
+        {loading && <div className="spinner-border text-success" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>}
         {!bugs.length
-          ? <h2 className='display-2'>No bugs to display</h2> :
+          ? <h2 className='display-3'>No bugs found.</h2> :
           <>
-            <span className='display-3 text-primary me-4'>Bug List</span>
-            <span className='fs-3 mb-4 badge rounded-circle text-bg-warning'>{bugs.length}</span>
+            <span className='display-3 text-dark me-4'>Bug List</span>
+            <span className='fs-3 mb-4 badge rounded-circle text-bg-secondary'>{bugs.length}</span>
             <br />
             {bugs.map(bug =>
               <>
@@ -56,7 +54,7 @@ export default function BugList({ auth, showToast }) {
                   </>
                   :
                   <div className='display-inline'>
-                    <BugSummary bug={bug} addEditMode={addEditMode} key={bug.id}  />
+                    <BugListItem bug={bug} key={bug.id}/>
                   </div>
                 }
               </>
