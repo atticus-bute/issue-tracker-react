@@ -15,6 +15,7 @@ import BugListItem from './BugListItem.jsx';
 import BugSummary from './BugSummary.jsx';
 import BugEditor from './BugEditor.jsx';
 import UserEditor from './UserEditor.jsx';
+import UserSummary from './UserSummary.jsx';
 
 function App() {
   const [auth, setAuth] = useState(null);
@@ -26,6 +27,7 @@ function App() {
       position: 'bottom-right',
       autoClose: 2500,
       closeOnClick: true,
+      pauseOnHover: false
     });
   }
 
@@ -87,7 +89,7 @@ function App() {
           <Route path="/login" element={<LoginForm onLogin={onLogin} />} />
           <Route path="/register" element={<RegisterForm onLogin={onLogin}/>} />
           <Route path="/bug/:bugId" element={<BugSummary/>} />
-          <Route path="/user/:userId" element={<h1>User Summary</h1>} />
+          <Route path="/user/:userId" element={<UserSummary/>} />
           <Route path="/bug/:bugId/edit" element={<BugEditor/>} showToast={showToast} />
           <Route path="/user/:userId/edit" element={<UserEditor/>} />
         </Routes>

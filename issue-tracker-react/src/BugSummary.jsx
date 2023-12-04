@@ -15,10 +15,9 @@ export default function BugSummary() {
   }, []);
 
   return (
-    <>
       <div className='row'>
         <div className='col-3'></div>
-        <Link className="card col-6 m-1 text-decoration-none">
+        <div className="card col-6 m-1">
           <div className="card-body">
             <h5 className="card-title fw-bold fst-italic">{bug.title}</h5>
             <h6 className="card-subtitle text-body-secondary">{bug.description}</h6>
@@ -30,14 +29,11 @@ export default function BugSummary() {
             <p className="text-body-secondary">Author: {bug.createdBy?.fullName}</p>
             <span className="text-body-secondary">{moment(bug.creationDate).fromNow()}</span>
             <br />
-        <Link className='mt-3 btn btn-small mx-2 btn-danger' to='/bugs'>Back</Link>
-        <Link className='mt-3 btn btn-small btn-warning' to={`/bug/${bugId}/edit`} >Edit</Link>
+            <Link className='mt-3 btn btn-small mx-2 btn-danger' to='/bugs'>Back</Link>
+            <Link className='mt-3 btn btn-small btn-warning' to={`/bug/${bugId}/edit`} >Edit</Link>
           </div>
-        </Link>
+        </div>
         <div className='col-3'></div>
       </div>
-      <div>
-      </div>
-    </>
   );
 }

@@ -1,10 +1,7 @@
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { useState } from 'react';
-export default function BugSummary({ bug, addEditMode }) {
-  function onClickEdit(bug) {
-    addEditMode(bug._id);
-  }
+export default function BugSummary({ bug }) {
   return (
     <>
       <Link className="card col-2 m-1 text-decoration-none" to={`/bug/${bug._id}`}>

@@ -1,15 +1,27 @@
+import { Link } from 'react-router-dom';
+import moment from 'moment';
 import { useState } from 'react';
-export default function UserListItem({ user, onDeleteUser }) {
-  //const [user, setUser] = useState({email: 'admin@example.com', password: 'password', givenName: 'Admin', familyName: 'User' })
+export default function UserListItem({ user }) {
   return (
     <>
-      <div className="card col-2 m-1">
+      <Link className="card col-2 m-1 text-decoration-none" to={`/user/${user._id}`}>
         <div className="card-body">
-          <h5 className="card-title">{user.fullName}</h5>
+          <h5 className="card-title fw-bold">{user.fullName}</h5>
           <h6 className="card-subtitle mb-2 text-body-secondary">{user.email}</h6>
+          {user.role.length ? (
+            user.role.map((role) => (
+              <span key={role} className='badge bg-primary mx-1'>
+                {role}
+              </span>
+            ))
+          ) : (
+            <span className='badge bg-danger mx-1'>No roles</span>
+          )}
         </div>
-        <button className='btn btn-danger btn-sm mx-5 mb-3' onClick={(evt) => onDeleteUser(evt, user._id)} >Remove User</button>
-      </div>
+        <div className='card-footer'>
+          <span className="text-body-secondary">{moment(user.creationDate).fromNow()}</span>
+        </div>
+      </Link>
     </>
   );
 }

@@ -13,15 +13,32 @@ export default function UserSummary() {
       })
       .catch(error => { console.log(error) });
   }, []);
+  
   return (
-    <>
-      <div className="card col-2 m-1">
+    <div className='row'>
+      <div className='col-3'></div>
+      <div className="card col-6 m-1">
         <div className="card-body">
-          <h5 className="card-title">{user.fullName}</h5>
+          <h5 className="card-title fw-bold">{user.fullName}</h5>
           <h6 className="card-subtitle mb-2 text-body-secondary">{user.email}</h6>
+          {user.role?.length ? (
+            user.role.map((role) => (
+              <span key={role} className='badge bg-primary mx-1'>
+                {role}
+              </span>
+            ))
+          ) : (
+            <span className='badge bg-danger mx-1'>No roles</span>
+          )}
         </div>
-        <button className='btn btn-danger btn-sm mx-5 mb-3' onClick={(evt) => onDeleteUser(evt, user._id)} >Remove User</button>
+        <div className='card-footer'>
+          <span className="text-body-secondary">{moment(user.creationDate).fromNow()}</span>
+          <br />
+            <Link className='mt-3 btn btn-small mx-2 btn-danger' to='/users'>Back</Link>
+            <Link className='mt-3 btn btn-small btn-warning' to={`/user/${userId}/edit`} >Edit</Link>
+        </div>
       </div>
-    </>
+      <div className='col-3'></div>
+    </div>
   );
 }
