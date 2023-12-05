@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { NavLink } from 'react-router-dom';
-export default function LoginForm({ onLogin }) {
+export default function LoginForm({ onLogin, showToast }) {
 
   const [email, setEmail] = useState('');
   const [emailConfirm, setEmailConfirm] = useState('');
@@ -28,19 +28,18 @@ export default function LoginForm({ onLogin }) {
     ? 'Given Name is required' : '';
 
     function onSubmitRegister(evt) {
-      setError('');
       evt.preventDefault();
       if (emailError) {
-        setError(emailError);
+        showToast(emailError, 'error');
         return;
       } else if (passwordError) {
-        setError(passwordError);
+        showToast(passwordError, 'error');
         return;
       } else if (givenNameError) {
-        setError(givenNameError);
+        showToast(givenNameError, 'error');
         return;
       } else if (familyNameError) {
-        setError(familyNameError);
+        showToast(familyNameError, 'error');
         return;
       }
       axios.post(`${import.meta.env.VITE_API_URL}/api/users/register`, {
@@ -52,14 +51,14 @@ export default function LoginForm({ onLogin }) {
         .catch(error => {
           const resError = error?.response?.data;
           console.log(resError);
-          setError(resError.message);
+          showToast(resError.message, 'error');
           if (resError) {
             //bad username or password
             console.log(resError);
             if (typeof resError === 'string') {
-              setError(error.response.data);
+              showToast(error.response.data, 'error');
             } else if (resError.message) { //joi validation errors
-              setError(resError.message.details[0].message)
+              showToast(resError.message.details[0].message, 'error');
             }
           }
         });
@@ -69,7 +68,6 @@ export default function LoginForm({ onLogin }) {
       <div className='row'>
         <div className="col-4"></div>
         <div className="col-4">
-        {error && <div className='alert alert-danger' role='alert'>{error}</div>}
           <label htmlFor="txtEmail" className="form-label">Email:</label>
           <input type="email" autoFocus='true' className='form-control' name="emailField" id='txtEmail' onChange={(evt) => setEmail(evt.target.value)} />
           <label htmlFor="txtEmailConfirm" className="form-label">Confirm Email:</label>

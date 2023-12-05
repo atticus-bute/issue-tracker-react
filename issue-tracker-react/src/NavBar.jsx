@@ -1,6 +1,5 @@
 import { NavLink } from "react-router-dom";
 import axios from 'axios';
-
 export default function NavBar({ auth, onLogout }) {
 
   function onClickLogout(evt) {
@@ -25,8 +24,14 @@ export default function NavBar({ auth, onLogout }) {
             <ul className="navbar-nav">
               {auth &&
                 <>
-                  <li className="nav-item">
-                    <NavLink className="nav-link" to="/bugs">Bugs</NavLink>
+                  <li className="nav-item dropdown">
+                    <a className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Bugs
+                    </a>
+                    <ul className="dropdown-menu">
+                      <li><NavLink className="nav-link dropdown-item text-decoration-none" to="/bugs">All Bugs</NavLink></li>
+                      <li><NavLink className="nav-link dropdown-item text-decoration-none" to="/bug/report">Report Bug</NavLink></li>
+                    </ul>
                   </li>
                   <li className="nav-item">
                     <NavLink className="nav-link" to="/users">Users</NavLink>
@@ -44,7 +49,7 @@ export default function NavBar({ auth, onLogout }) {
               }
               {auth &&
                 <>
-                  <div className="nav-item-group">
+                  <div className="d-flex">
                     <li className="nav-item">
                       <NavLink className="nav-link" to="/profile">{auth.email}</NavLink>
                     </li>

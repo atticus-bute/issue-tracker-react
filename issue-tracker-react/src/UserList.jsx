@@ -19,6 +19,24 @@ export default function UserList({ auth, showToast }) {
       .catch(error => console.log(error));
   }
 
+  const onFormSubmit = (evt) => {
+    evt.preventDefault();
+    const search = evt.target.search.value;
+    axios.get(`${import.meta.env.VITE_API_URL}/api/users/list`, { withCredentials: true, params: { keywords: search } })
+      .then(response => {
+        console.log('Searching users');
+        if (response.data.length === 0) {
+          showToast('No users found', 'info');
+          return;
+        }
+        setUsers(response.data);
+      })
+      .catch(error => {
+        console.log(error);
+        showToast('Error searching users', 'error');
+      });
+  }
+
   useEffect(() => {
     setLoading(true);
     axios.get(`${import.meta.env.VITE_API_URL}/api/users/list`, { withCredentials: true })
@@ -43,8 +61,46 @@ export default function UserList({ auth, showToast }) {
           ? <h2 className='display-2'>No users to display</h2> :
           <>
             <span className='display-3 text-dark me-4'>User List</span>
-            <span className='fs-3 mb-4 badge rounded-circle text-bg-secondary'>{users.length}</span>
+            <span className='fs-3 mb-4 badge rounded-circle text-bg-success'>{users.length}</span>
             <br />
+            <form onSubmit={(evt) => onFormSubmit(evt)}>
+              <div className="form-group input-group">
+                <button className="btn btn-success" type="submit" id="button-addon1">Search</button>
+                <input type="text" className="form-control" placeholder="keywords" />
+              </div>
+              <div className="form-group row mt-2">
+                <div className="d-flex flex-column col">
+                  <label className="form-label">Min Age:</label>
+                  <input type="number" className="form-control" id="minAge" name="minAge" min={0} placeholder="0" />
+                </div>
+                <div className="d-flex flex-column col">
+                  <label className="form-label">Max Age:</label>
+                  <input type="number" className="form-control" id="maxAge" name="maxAge" min={0} placeholder="0" />
+                </div>
+                <div className="d-flex flex-column col">
+                  <label className="form-label mx-3">Role:</label>
+                  <select className="form-select mx-3">
+                    <option className='form-select' selected>N/A</option>
+                    <option value="Developer">Developer</option>
+                    <option value="Business Analyst">Business Analyst</option>
+                    <option value="Technical Manager">Technical Manager</option>
+                    <option value="Quality Analyst">Quality Analyst</option>
+                    <option value="Product Manager">Product Manager</option>
+                  </select>
+                </div>
+                <div className="d-flex flex-column col">
+                  <label className="form-label mx-3">Sort by:</label>
+                  <select className="form-select mx-3">
+                    <option className='form-select' selected>N/A</option>
+                    <option value="givenName">Given Name</option>
+                    <option value="familyName">Family Name</option>
+                    <option value="role">Role</option>
+                    <option value="newest">Newest</option>
+                    <option value="oldest">Oldest</option>
+                  </select>
+                </div>
+              </div>
+            </form>
             {users.map(user =>
               <>
                 {user.editMode

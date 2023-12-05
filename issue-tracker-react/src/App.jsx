@@ -11,7 +11,7 @@ import NavBar from './NavBar.jsx';
 import Footer from './Footer.jsx';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import BugListItem from './BugListItem.jsx';
+import ReportBug from './ReportBug.jsx';
 import BugSummary from './BugSummary.jsx';
 import BugEditor from './BugEditor.jsx';
 import UserEditor from './UserEditor.jsx';
@@ -87,7 +87,8 @@ function App() {
           <Route path="/bugs" element={<BugList auth={auth} showToast={showToast}/>} />
           <Route path="/users" element={<UserList auth={auth} showToast={showToast}/>} />
           <Route path="/login" element={<LoginForm onLogin={onLogin} />} />
-          <Route path="/register" element={<RegisterForm onLogin={onLogin}/>} />
+          <Route path="/register" element={<RegisterForm onLogin={onLogin} showToast={showToast}/>} />
+          <Route path="/bug/report" element={<ReportBug showToast={showToast}/>} />
           <Route path="/bug/:bugId" element={<BugSummary/>} />
           <Route path="/user/:userId" element={<UserSummary/>} />
           <Route path="/bug/:bugId/edit" element={<BugEditor/>} showToast={showToast} />
