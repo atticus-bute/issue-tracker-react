@@ -25,7 +25,32 @@ export default function ReportBug({showToast}) {
       showToast( stepsToReproduceError, 'error');
       return;
     }
-// FINISH POSTING BUG
+    axios.post(`${import.meta.env.VITE_API_URL}/api/bugs/new`, {
+      title, description, stepsToReproduce
+    }, { withCredentials: true })
+      .then(() => {
+        navigate('/bugs');
+      })
+      .catch(error => {
+        const resError = error?.response?.data;
+        console.log(resError);
+        showToast(resError.message, 'error');
+        if (resError) {
+          //bad username or password
+          console.log(resError);
+          if (typeof resError === 'string') {
+            showToast(error.response.data, 'error');
+          } else if (resError.message) { //joi validation errors
+            showToast(resError.message, 'error');
+          } else if (resError.errors) {
+            showToast(resError.errors[0].message, 'error');
+          } else {
+            showToast(error.response.data, 'error');
+          }
+        } else {
+          showToast(error.message, 'error');
+        }
+      });
   }
   return (
     <>

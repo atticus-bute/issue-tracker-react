@@ -69,7 +69,7 @@ export default function LoginForm({ onLogin, showToast }) {
         <div className="col-4"></div>
         <div className="col-4">
           <label htmlFor="txtEmail" className="form-label">Email:</label>
-          <input type="email" autoFocus='true' className='form-control' name="emailField" id='txtEmail' onChange={(evt) => setEmail(evt.target.value)} />
+          <input type="email" autoFocus={true} className='form-control' name="emailField" id='txtEmail' onChange={(evt) => setEmail(evt.target.value)} />
           <label htmlFor="txtEmailConfirm" className="form-label">Confirm Email:</label>
           <input type="email" className='form-control' name="emailConfirmField" id='txtEmailConfirm' onChange={(evt) => setEmailConfirm(evt.target.value)} />
           <label htmlFor="txtPassword" className="form-label">Password:</label>

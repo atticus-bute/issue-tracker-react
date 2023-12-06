@@ -66,7 +66,7 @@ export default function UserList({ auth, showToast }) {
             <form onSubmit={(evt) => onFormSubmit(evt)}>
               <div className="form-group input-group">
                 <button className="btn btn-success" type="submit" id="button-addon1">Search</button>
-                <input type="text" className="form-control" placeholder="keywords" />
+                <input type="text" className="form-control" placeholder="Keywords" />
               </div>
               <div className="form-group row mt-2">
                 <div className="d-flex flex-column col">
@@ -80,23 +80,22 @@ export default function UserList({ auth, showToast }) {
                 <div className="d-flex flex-column col">
                   <label className="form-label mx-3">Role:</label>
                   <select className="form-select mx-3">
-                    <option className='form-select' selected>N/A</option>
-                    <option value="Developer">Developer</option>
-                    <option value="Business Analyst">Business Analyst</option>
-                    <option value="Technical Manager">Technical Manager</option>
-                    <option value="Quality Analyst">Quality Analyst</option>
-                    <option value="Product Manager">Product Manager</option>
+                    <option className='form-select'>Any</option>
+                    <option className='form-select' value="Developer">Developer</option>
+                    <option className='form-select' value="Business Analyst">Business Analyst</option>
+                    <option className='form-select' value="Technical Manager">Technical Manager</option>
+                    <option className='form-select' value="Quality Analyst">Quality Analyst</option>
+                    <option className='form-select' value="Product Manager">Product Manager</option>
                   </select>
                 </div>
                 <div className="d-flex flex-column col">
                   <label className="form-label mx-3">Sort by:</label>
                   <select className="form-select mx-3">
-                    <option className='form-select' selected>N/A</option>
-                    <option value="givenName">Given Name</option>
-                    <option value="familyName">Family Name</option>
-                    <option value="role">Role</option>
-                    <option value="newest">Newest</option>
-                    <option value="oldest">Oldest</option>
+                    <option className='form-select' value="givenName">Given Name</option>
+                    <option className='form-select' value="familyName">Family Name</option>
+                    <option className='form-select' value="role">Role</option>
+                    <option className='form-select' value="newest">Newest</option>
+                    <option className='form-select' value="oldest">Oldest</option>
                   </select>
                 </div>
               </div>

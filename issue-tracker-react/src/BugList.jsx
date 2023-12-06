@@ -42,7 +42,7 @@ export default function BugList({ auth, showToast }) {
         setLoading(false);
       });
   }, []);
-  
+
   return (
     <>
       <div className='container'>
@@ -72,32 +72,29 @@ export default function BugList({ auth, showToast }) {
                 <div className="d-flex flex-column col">
                   <label className="form-label mx-3">Classification:</label>
                   <select className="form-select mx-3">
-                    <option className='form-select' selected>N/A</option>
-                    <option value="unclassified">Unclassified</option>
-                    <option value="approved">Approved</option>
-                    <option value="unapproved">Unapproved</option>
-                    <option value="duplicate">Duplicate</option>
+                    <option className='form-select'>Any</option>
+                    <option className='form-select' value="unclassified">Unclassified</option>
+                    <option className='form-select' value="approved">Approved</option>
+                    <option className='form-select' value="unapproved">Unapproved</option>
+                    <option className='form-select' value="duplicate">Duplicate</option>
                   </select>
                 </div>
-                <div className="d-flex flex-column col">
-                  <label className="form-label mx-3">Status:</label>
-                  <select className="form-select mx-3">
-                    <option className='form-select' selected>N/A</option>
-                    <option value="false">Open</option>
-                    <option value="true">Closed</option>
-                  </select>
-                </div>
+
                 <div className="d-flex flex-column col">
                   <label className="form-label mx-3">Sort by:</label>
                   <select className="form-select mx-3">
-                    <option className='form-select' selected>N/A</option>
-                    <option value="newest">Newest</option>
-                    <option value="oldest">Oldest</option>
-                    <option value="title">Title</option>
-                    <option value="classification">Classification</option>
-                    <option value="assignedTo">Assigned To</option>
-                    <option value="createdBy">Reported By</option>
+                    <option className='form-select' value="newest">Newest</option>
+                    <option className='form-select' value="oldest">Oldest</option>
+                    <option className='form-select' value="title">Title</option>
+                    <option className='form-select' value="classification">Classification</option>
+                    <option className='form-select' value="assignedTo">Assigned To</option>
+                    <option className='form-select' value="createdBy">Reported By</option>
                   </select>
+                </div>
+                <div className="d-flex flex-column col">
+                  <label className="form-label mx-3 invisible">Closed:</label>
+                  <input type="checkbox" className="btn-check" id="btncheckClosed" autoComplete="off" />
+                  <label className="btn btn-outline-success" htmlFor="btncheckClosed">Show Closed Bugs</label>
                 </div>
               </div>
             </form>

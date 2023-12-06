@@ -2,7 +2,7 @@ import { Link, useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import moment from 'moment';
 import axios from 'axios';
-export default function UserSummary() {
+export default function UserSummary({ showToast, reloadTick, setReloadTick}) {
   const { userId } = useParams();
   const [user, setUser] = useState({});
 
@@ -12,7 +12,7 @@ export default function UserSummary() {
         setUser(response.data);
       })
       .catch(error => { console.log(error) });
-  }, []);
+  }, [reloadTick]);
   
   return (
     <div className='row'>

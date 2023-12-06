@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import axios from 'axios';
-export default function NavBar({ auth, onLogout }) {
+export default function NavBar({ auth, onLogout, reloadTick, setReloadTick }) {
 
   function onClickLogout(evt) {
     evt.preventDefault();
@@ -51,7 +51,7 @@ export default function NavBar({ auth, onLogout }) {
                 <>
                   <div className="d-flex">
                     <li className="nav-item">
-                      <NavLink className="nav-link" to="/profile">{auth.email}</NavLink>
+                      <NavLink className="nav-link" onClick={()=>setReloadTick(reloadTick+1)} to={`/user/${auth._id}`} >{auth.email}</NavLink>
                     </li>
                     <li className="nav-item">
                       <button className="nav-link" to="/logout" onClick={(evt) => onClickLogout(evt)}>Logout</button>

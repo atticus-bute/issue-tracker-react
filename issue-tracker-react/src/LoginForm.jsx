@@ -61,7 +61,7 @@ export default function LoginForm({ onLogin }) {
           {error && <div className='alert alert-danger' role='alert'>{error}</div>}
           <form action="">
             <label htmlFor="txtEmail" className="form-label">Email:</label>
-            <input type="email" className='form-control' autoFocus='true' name="emailField" id='txtEmail' onChange={(evt) => setEmail(evt.target.value)} />
+            <input type="email" className='form-control' autoFocus={true} name="emailField" id='txtEmail' onChange={(evt) => setEmail(evt.target.value)} />
             <label htmlFor="txtPassword" className="form-label">Password:</label>
             <input type="password" className='form-control' name="passwordField" id='txtPassword' onChange={(evt) => setPassword(evt.target.value)} />
             <button type="button" className="btn btn-success mt-1" onClick={(evt) => onSubmitLogin(evt)} >Login</button>

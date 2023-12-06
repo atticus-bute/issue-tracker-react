@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-export default function BugEditor({showToast}) {
+export default function BugEditor({ showToast }) {
   const navigate = useNavigate();
   const { bugId } = useParams();
   const [bug, setBug] = useState({});
@@ -17,8 +17,8 @@ export default function BugEditor({showToast}) {
       stepsToReproduce: stepsToReproduce
     }
     axios.put(`${import.meta.env.VITE_API_URL}/api/bugs/${bugId}`,
-    {...updatedBug},
-    { withCredentials: true })
+      { ...updatedBug },
+      { withCredentials: true })
       .then(response => {
         console.log(response.data);
         navigate(`/bug/${bugId}`);
@@ -42,7 +42,7 @@ export default function BugEditor({showToast}) {
   return (
     <>
       <div className='row'>
-        <div className='col-3'></div>
+        <div className='col-1'></div>
         <div className="card col-6 m-1">
           <div className="card-body">
             <form onSubmit={(evt) => onBugUpdate(evt)}>
@@ -57,7 +57,40 @@ export default function BugEditor({showToast}) {
             </form>
           </div>
         </div>
-        <div className='col-3'></div>
+        <div className='col-4 flex-column'>
+          <form className='card card-body my-1'>
+            <label className='form-labe fw-bold' htmlFor="inputGroupSelectClassification">Classification:</label>
+            <div className="input-group">
+              <select className="form-select" id="inputGroupSelectClassification">
+                <option className='form-select' value='unclassified'>Unclassified</option>
+                <option className='form-select' value="approved">Approved</option>
+                <option className='form-select' value="unapproved">Unapproved</option>
+                <option className='form-select' value="duplicate">Duplicate</option>
+              </select>
+              <button className="btn btn-outline-success" type="submit">Classify</button>
+            </div>
+          </form>
+          <form className='card card-body my-1'>
+            <label className='form-label fw-bold' htmlFor="inputGroupSelectAssigned">Assigned to:</label>
+            <div className="input-group">
+              <select className="form-select" id="inputGroupSelectAssigned">
+                <option className='form-select' value='Unassigned'>Unassigned</option>
+                <option className='form-select' value="Arty">Arty</option>
+              </select>
+              <button className="btn btn-outline-success" type="submit">Assign</button>
+            </div>
+          </form>
+          <form className='card card-body my-1'>
+            <label className='form-label fw-bold' htmlFor="inputGroupSelectClosed">Status:</label>
+            <div className="input-group">
+              <select className="form-select" id="inputGroupSelectClosed">
+                <option className='form-select' value='false'>Open</option>
+                <option className='form-select' value="true">Closed</option>
+              </select>
+              <button className="btn btn-outline-success" type="submit">Save</button>
+            </div>
+          </form>
+        </div>
       </div>
     </>
   );

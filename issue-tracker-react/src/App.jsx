@@ -19,6 +19,7 @@ import UserSummary from './UserSummary.jsx';
 
 function App() {
   const [auth, setAuth] = useState(null);
+  const [reloadTick, setReloadTick] = useState(0);
   const navigate = useNavigate();
 
   function showToast(message, type) {
@@ -76,7 +77,7 @@ function App() {
   return (
     <>
       <header>
-        <NavBar auth={auth} onLogout={onLogout} />
+        <NavBar auth={auth} onLogout={onLogout} reloadTick={reloadTick} setReloadTick={setReloadTick}/>
       </header>
       <main className='flex-grow-1 bg-success-subtle'>
         <Routes>
@@ -89,8 +90,8 @@ function App() {
           <Route path="/login" element={<LoginForm onLogin={onLogin} />} />
           <Route path="/register" element={<RegisterForm onLogin={onLogin} showToast={showToast}/>} />
           <Route path="/bug/report" element={<ReportBug showToast={showToast}/>} />
-          <Route path="/bug/:bugId" element={<BugSummary/>} />
-          <Route path="/user/:userId" element={<UserSummary/>} />
+          <Route path="/bug/:bugId" element={<BugSummary reloadTick={reloadTick} setReloadTick={setReloadTick} auth={auth} showToast={showToast}/>} />
+          <Route path="/user/:userId" element={<UserSummary reloadTick={reloadTick} setReloadTick={setReloadTick} showToast={showToast}/>} />
           <Route path="/bug/:bugId/edit" element={<BugEditor/>} showToast={showToast} />
           <Route path="/user/:userId/edit" element={<UserEditor/>} />
         </Routes>
