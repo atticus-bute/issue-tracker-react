@@ -17,7 +17,7 @@ export default function UserSummary({ showToast, reloadTick, setReloadTick}) {
   return (
     <div className='row'>
       <div className='col-3'></div>
-      <div className="card col-6 m-1">
+      <div className="card col-6 m-1 p-0">
         <div className="card-body">
           <h5 className="card-title fw-bold">{user.fullName}</h5>
           <h6 className="card-subtitle mb-2 text-body-secondary">{user.email}</h6>
@@ -32,7 +32,7 @@ export default function UserSummary({ showToast, reloadTick, setReloadTick}) {
           )}
         </div>
         <div className='card-footer'>
-          <span className="text-body-secondary">{moment(user.creationDate).fromNow()}</span>
+          <span className="text-body-secondary">Registered {moment(user.creationDate).fromNow()}</span>
           <br />
             <Link className='mt-3 btn btn-small mx-2 btn-danger' to='/users'>Back</Link>
             <Link className='mt-3 btn btn-small btn-warning' to={`/user/${userId}/edit`} >Edit</Link>

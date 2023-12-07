@@ -6,7 +6,7 @@ import axios from 'axios';
 
 export default function UserList({ auth, showToast }) {
   const [users, setUsers] = useState([]);
-  const [newUser, setNewUser] = useState({ id: nanoid(), editMode: false, email: '', password: '', givenName: '', familyName: '', fullName: '' });
+  //const [newUser, setNewUser] = useState({ id: nanoid(), editMode: false, email: '', password: '', givenName: '', familyName: '', fullName: '' });
   const [loading, setLoading] = useState(false);
 
   function onDeleteUser(evt, userId) {
@@ -54,7 +54,7 @@ export default function UserList({ auth, showToast }) {
   return (
     <>
       <div className='container'>
-      {loading && <div className="spinner-border text-success" role="status">
+        {loading && <div className="spinner-border text-success" role="status">
           <span className="visually-hidden">Loading...</span>
         </div>}
         {!users.length
@@ -100,20 +100,22 @@ export default function UserList({ auth, showToast }) {
                 </div>
               </div>
             </form>
-            {users.map(user =>
-              <>
-                {user.editMode
-                  ?
-                  <>
-                    <UserEditor user={user} key={user.id} onDeleteUser={onDeleteUser} />
-                  </>
-                  :
-                  <div className='d-inline'>
-                    <UserListItem user={user} key={user.id} />
-                  </div>
-                }
-              </>
-            )}
+            <div className="row">
+              {users.map(user =>
+                <>
+                  {user.editMode
+                    ?
+                    <>
+                      <UserEditor user={user} key={user.id} onDeleteUser={onDeleteUser} />
+                    </>
+                    :
+                    <div className='col-4'>
+                      <UserListItem user={user} key={user.id} />
+                    </div>
+                  }
+                </>
+              )}
+            </div>
           </>
         }
       </div>

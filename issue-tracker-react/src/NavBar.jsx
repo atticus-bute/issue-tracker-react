@@ -25,7 +25,7 @@ export default function NavBar({ auth, onLogout, reloadTick, setReloadTick }) {
               {auth &&
                 <>
                   <li className="nav-item dropdown">
-                    <a className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false" href="#">
                       Bugs
                     </a>
                     <ul className="dropdown-menu">

@@ -6,7 +6,7 @@ export default function BugSummary({auth, showToast, reloadTick, setReloadTick})
   const { bugId } = useParams();
   const navigate = useNavigate();
   const [bug, setBug] = useState({});
-  const [newComment, setNewComment] = useState();
+  const [newComment, setNewComment] = useState('');
 
   function onAddComment(evt) {
     evt.preventDefault();
@@ -38,7 +38,7 @@ export default function BugSummary({auth, showToast, reloadTick, setReloadTick})
   return (
     <div className='row'>
       <div className='col-3'></div>
-      <div className="card col-6 m-1">
+      <div className="card col-6 m-1 p-0">
         <div className="card-body">
           <h5 className="card-title fw-bold fst-italic">{bug.title}</h5>
           <h6 className="card-subtitle text-body-secondary">{bug.description}</h6>
@@ -48,7 +48,7 @@ export default function BugSummary({auth, showToast, reloadTick, setReloadTick})
         </div>
         <div className='card-footer'>
           <p className="text-body-secondary">Author: {bug.createdBy?.fullName}</p>
-          <span className="text-body-secondary">{moment(bug.creationDate).fromNow()}</span>
+          <span className="text-body-secondary">Reported {moment(bug.creationDate).fromNow()}</span>
           <br />
           <Link className='mt-3 btn btn-small mx-2 btn-danger' to='/bugs'>Back</Link>
           <Link className='mt-3 btn btn-small btn-warning' to={`/bug/${bugId}/edit`} >Edit</Link>
@@ -58,10 +58,10 @@ export default function BugSummary({auth, showToast, reloadTick, setReloadTick})
       <div className="col-4">
         <form onSubmit={(evt) => onAddComment(evt)}>
           <div className="form-group">
-            <label htmlFor="comment">Add Comment:</label>
+            <label htmlFor="comment" className='fw-bold'>Add Comment:</label>
             <div className="input-group">
               <textarea className="form-control" name="comment" id="comment" cols="30" rows="4" aria-label="With textarea" value={newComment} onChange={(evt)=> setNewComment(evt.target.value)}></textarea>
-              <button className="btn btn-outline-success" type='submit'>Post Comment</button>
+              <button className="btn btn-success" type='submit'>Post Comment</button>
             </div>
           </div>
         </form>
@@ -71,13 +71,13 @@ export default function BugSummary({auth, showToast, reloadTick, setReloadTick})
         bug.comments.map((comment) =>
           <>
             <div className='col-4'></div>
-            <div className="card col-4 my-1">
+            <div className="card col-4 my-1 p-0">
               <div className="card-body">
                 <p className="card-text">{comment.comment}</p>
               </div>
               <div className='card-footer d-flex justify-content-between'>
                 <span className="text-body-secondary">{comment.author.fullName}</span>
-                <span className="text-body-secondary">{moment(comment.date).fromNow()}</span>
+                <span className="text-body-secondary">Posted {moment(comment.date).fromNow()}</span>
               </div>
             </div>
             <div className='col-4'></div>

@@ -25,6 +25,17 @@ export default function BugEditor({ showToast }) {
       })
       .catch(error => {
         console.log(error)
+        const resError = error?.response?.data;
+          console.log(resError);
+          showToast(resError.message, 'error');
+          if (resError) {
+            console.log(resError);
+            if (typeof resError === 'string') {
+              showToast(error.response.data, 'error');
+            } else if (resError.message) { //joi validation errors
+              showToast(resError.message.details[0].message, 'error');
+            }
+          }
       });
   }
 

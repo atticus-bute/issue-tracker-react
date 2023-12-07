@@ -4,7 +4,7 @@ import { useState } from 'react';
 export default function UserListItem({ user }) {
   return (
     <>
-      <Link className="card col-2 m-1 text-decoration-none" to={`/user/${user._id}`}>
+      <Link className="card m-1 text-decoration-none p-0" to={`/user/${user._id}`}>
         <div className="card-body">
           <h5 className="card-title fw-bold">{user.fullName}</h5>
           <h6 className="card-subtitle mb-2 text-body-secondary">{user.email}</h6>
@@ -19,7 +19,7 @@ export default function UserListItem({ user }) {
           )}
         </div>
         <div className='card-footer'>
-          <span className="text-body-secondary">{moment(user.creationDate).fromNow()}</span>
+          <span className="text-body-secondary">Registered {moment(user.creationDate).fromNow()}</span>
         </div>
       </Link>
     </>

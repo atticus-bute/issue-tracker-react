@@ -98,20 +98,22 @@ export default function BugList({ auth, showToast }) {
                 </div>
               </div>
             </form>
-            {bugs.map(bug =>
-              <>
-                {bug.editMode
-                  ?
-                  <>
-                    <BugEditor bug={bug} key={bug.id} />
-                  </>
-                  :
-                  <div className='display-inline'>
-                    <BugListItem bug={bug} key={bug.id} />
-                  </div>
-                }
-              </>
-            )}
+            <div className="row">
+              {bugs.map(bug =>
+                <>
+                  {bug.editMode
+                    ?
+                    <>
+                      <BugEditor bug={bug} key={bug.id} />
+                    </>
+                    :
+                    <div className='col-3'>
+                      <BugListItem bug={bug} key={bug.id} />
+                    </div>
+                  }
+                </>
+              )}
+            </div>
           </>
         }
       </div>

@@ -29,27 +29,38 @@ export default function UserEditor({ showToast }) {
       })
       .catch(error => {
         console.log(error)
+        const resError = error?.response?.data;
+        console.log(resError);
+        showToast(resError.message, 'error');
+        if (resError) {
+          console.log(resError);
+          if (typeof resError === 'string') {
+            showToast(error.response.data, 'error');
+          } else if (resError.message) { //joi validation errors
+            showToast(resError.message.details[0].message, 'error');
+          }
+        }
       });
   }
 
   useEffect(() => {
     axios.get(`${import.meta.env.VITE_API_URL}/api/users/${userId}`, { withCredentials: true })
-    .then(response => {
-      setUser(response.data);
-      setGivenName(response.data.givenName);
-      setFamilyName(response.data.familyName);
-      setFullName(response.data.fullName);
-      setPassword(response.data.password);
-      setRole(response.data.role);
-    })
-    .catch(error => { console.log(error) });
+      .then(response => {
+        setUser(response.data);
+        setGivenName(response.data.givenName);
+        setFamilyName(response.data.familyName);
+        setFullName(response.data.fullName);
+        setPassword(response.data.password);
+        setRole(response.data.role);
+      })
+      .catch(error => { console.log(error) });
   }, []);
 
   return (
     <>
       <div className='row'>
-        <div className='col-3'></div>
-        <div className="card col-6">
+        <div className='col-1'></div>
+        <div className="card col-6 m-1">
           <div className="card-body">
             <form onSubmit={(evt) => onUserUpdate(evt)}>
               <label htmlFor="txtUserGivenName" className='form-label'>Given Name:</label>
@@ -65,7 +76,31 @@ export default function UserEditor({ showToast }) {
             </form>
           </div>
         </div>
-        <div className='col-3'></div>
+        <div className='col-4'>
+          <form className="card card-body my-1 p-0">
+            <div className="card-header">User Roles:</div>
+            <div className="form-check form-switch m-2">
+              <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckRole1"/>
+                <label className="form-check-label" htmlFor="flexSwitchCheckRole1">Developer</label>
+            </div>
+            <div className="form-check form-switch m-2">
+              <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckRole2"/>
+                <label className="form-check-label" htmlFor="flexSwitchCheckRole2">Business Analyst</label>
+            </div>
+            <div className="form-check form-switch m-2">
+              <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckRole3"/>
+                <label className="form-check-label" htmlFor="flexSwitchCheckRole3">Technical Manager</label>
+            </div>
+            <div className="form-check form-switch m-2">
+              <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckRole4"/>
+                <label className="form-check-label" htmlFor="flexSwitchCheckRole4">Quality Analyst</label>
+            </div>
+            <div className="form-check form-switch m-2">
+              <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckRole5"/>
+                <label className="form-check-label" htmlFor="flexSwitchCheckRole5">Product Manager</label>
+            </div>
+          </form>
+        </div>
       </div>
     </>
   );

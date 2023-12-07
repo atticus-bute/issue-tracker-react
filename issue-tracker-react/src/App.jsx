@@ -75,9 +75,10 @@ function App() {
   }, []);
 
   return (
-    <>
+    <div style={{ userSelect: 'none' }}>
       <header>
         <NavBar auth={auth} onLogout={onLogout} reloadTick={reloadTick} setReloadTick={setReloadTick}/>
+        {console.log()}
       </header>
       <main className='flex-grow-1 bg-success-subtle'>
         <Routes>
@@ -92,13 +93,13 @@ function App() {
           <Route path="/bug/report" element={<ReportBug showToast={showToast}/>} />
           <Route path="/bug/:bugId" element={<BugSummary reloadTick={reloadTick} setReloadTick={setReloadTick} auth={auth} showToast={showToast}/>} />
           <Route path="/user/:userId" element={<UserSummary reloadTick={reloadTick} setReloadTick={setReloadTick} showToast={showToast}/>} />
-          <Route path="/bug/:bugId/edit" element={<BugEditor/>} showToast={showToast} />
-          <Route path="/user/:userId/edit" element={<UserEditor/>} />
+          <Route path="/bug/:bugId/edit" element={<BugEditor showToast={showToast}/>} />
+          <Route path="/user/:userId/edit" element={<UserEditor showToast={showToast}/>} />
         </Routes>
         <ToastContainer />
       </main>
       <Footer />
-    </>
+    </div>
   );
 }
 
