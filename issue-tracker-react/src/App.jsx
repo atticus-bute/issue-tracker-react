@@ -63,9 +63,9 @@ function App() {
     }
     if (now.getTime() > currentUser.expiration) {
       axios.post(`${import.meta.env.VITE_API_URL}/api/users/logout`, {}, { withCredentials: true })
-      .then(() => {
-        onLogout();
-      })
+        .then(() => {
+          onLogout();
+        })
       return;
     }
     if (currentUser) {
@@ -77,7 +77,7 @@ function App() {
   return (
     <div style={{ userSelect: 'none' }}>
       <header>
-        <NavBar auth={auth} onLogout={onLogout} reloadTick={reloadTick} setReloadTick={setReloadTick}/>
+        <NavBar auth={auth} onLogout={onLogout} reloadTick={reloadTick} setReloadTick={setReloadTick} />
         {console.log()}
       </header>
       <main className='flex-grow-1 bg-success-subtle'>
@@ -86,15 +86,15 @@ function App() {
             <span className='display-5'>Welcome, {auth.fullName}!</span> :
             <span className='display-5'>Please Login</span>
           } />
-          <Route path="/bugs" element={<BugList auth={auth} showToast={showToast}/>} />
-          <Route path="/users" element={<UserList auth={auth} showToast={showToast}/>} />
+          <Route path="/bugs" element={<BugList auth={auth} showToast={showToast} />} />
+          <Route path="/users" element={<UserList auth={auth} showToast={showToast} />} />
           <Route path="/login" element={<LoginForm onLogin={onLogin} />} />
-          <Route path="/register" element={<RegisterForm onLogin={onLogin} showToast={showToast}/>} />
-          <Route path="/bug/report" element={<ReportBug showToast={showToast}/>} />
-          <Route path="/bug/:bugId" element={<BugSummary reloadTick={reloadTick} setReloadTick={setReloadTick} auth={auth} showToast={showToast}/>} />
-          <Route path="/user/:userId" element={<UserSummary reloadTick={reloadTick} setReloadTick={setReloadTick} showToast={showToast}/>} />
-          <Route path="/bug/:bugId/edit" element={<BugEditor showToast={showToast}/>} />
-          <Route path="/user/:userId/edit" element={<UserEditor showToast={showToast}/>} />
+          <Route path="/register" element={<RegisterForm onLogin={onLogin} showToast={showToast} />} />
+          <Route path="/bug/report" element={<ReportBug showToast={showToast} />} />
+          <Route path="/bug/:bugId" element={<BugSummary reloadTick={reloadTick} setReloadTick={setReloadTick} auth={auth} showToast={showToast} />} />
+          <Route path="/user/:userId" element={<UserSummary reloadTick={reloadTick} setReloadTick={setReloadTick} showToast={showToast} />} />
+          <Route path="/bug/:bugId/edit" element={<BugEditor showToast={showToast} />} />
+          <Route path="/user/:userId/edit" element={<UserEditor showToast={showToast} />} />
         </Routes>
         <ToastContainer />
       </main>

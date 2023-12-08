@@ -6,13 +6,18 @@ import axios from 'axios';
 
 export default function BugList({ auth, showToast }) {
   const [bugs, setBugs] = useState([]);
-  const [newBug, setNewBug] = useState({ id: nanoid(), editMode: false, title: '', description: '', stepsToReproduce: '' });
+  const [checked, setChecked] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const onFormSubmit = (evt) => {
     evt.preventDefault();
-    const search = evt.target.search.value;
-    axios.get(`${import.meta.env.VITE_API_URL}/api/bugs/list`, { withCredentials: true, params: { keywords: search } })
+    const keywords = evt.target.keywords.value;
+    const minAge = evt.target.minAge.value;
+    const maxAge = evt.target.maxAge.value;
+    const classification = evt.target.classification.value;
+    const sortBy = evt.target.sortBy.value;
+    const closed = evt.target.checkClosed.checked;
+    axios.get(`${import.meta.env.VITE_API_URL}/api/bugs/list`, { withCredentials: true, params: { keywords, minAge, maxAge, classification, sortBy, closed } })
       .then(response => {
         console.log('Searching bugs');
         if (response.data.length === 0) {
@@ -29,7 +34,7 @@ export default function BugList({ auth, showToast }) {
 
   useEffect(() => {
     setLoading(true);
-    axios.get(`${import.meta.env.VITE_API_URL}/api/bugs/list`, { withCredentials: true })
+    axios.get(`${import.meta.env.VITE_API_URL}/api/bugs/list`, { withCredentials: true, params: { closed } })
       .then(response => {
         console.log('Getting bugs');
         setBugs(response.data);
@@ -58,7 +63,7 @@ export default function BugList({ auth, showToast }) {
             <form onSubmit={(evt) => onFormSubmit(evt)}>
               <div className="form-group input-group">
                 <button className="btn btn-success" type="submit" id="button-addon1">Search</button>
-                <input type="text" className="form-control" placeholder="Keywords" />
+                <input type="text" className="form-control" placeholder="Keywords" id='keywords'/>
               </div>
               <div className="form-group row mt-2">
                 <div className="d-flex flex-column col">
@@ -71,8 +76,8 @@ export default function BugList({ auth, showToast }) {
                 </div>
                 <div className="d-flex flex-column col">
                   <label className="form-label mx-3">Classification:</label>
-                  <select className="form-select mx-3">
-                    <option className='form-select'>Any</option>
+                  <select className="form-select mx-3" id='classification'>
+                    <option className='form-select' value="">Any</option>
                     <option className='form-select' value="unclassified">Unclassified</option>
                     <option className='form-select' value="approved">Approved</option>
                     <option className='form-select' value="unapproved">Unapproved</option>
@@ -82,7 +87,7 @@ export default function BugList({ auth, showToast }) {
 
                 <div className="d-flex flex-column col">
                   <label className="form-label mx-3">Sort by:</label>
-                  <select className="form-select mx-3">
+                  <select className="form-select mx-3" id='sortBy'>
                     <option className='form-select' value="newest">Newest</option>
                     <option className='form-select' value="oldest">Oldest</option>
                     <option className='form-select' value="title">Title</option>
@@ -93,8 +98,8 @@ export default function BugList({ auth, showToast }) {
                 </div>
                 <div className="d-flex flex-column col">
                   <label className="form-label mx-3 invisible">Closed:</label>
-                  <input type="checkbox" className="btn-check" id="btncheckClosed" autoComplete="off" />
-                  <label className="btn btn-outline-success" htmlFor="btncheckClosed">Show Closed Bugs</label>
+                  <input type="checkbox" className="btn-check" id="checkClosed" autoComplete="off" checked={checked} onClick={() => setChecked(!checked)} />
+                  <label className="btn btn-outline-success" htmlFor="checkClosed">Show Closed Bugs</label>
                 </div>
               </div>
             </form>

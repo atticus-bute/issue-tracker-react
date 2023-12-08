@@ -6,7 +6,6 @@ import axios from 'axios';
 
 export default function UserList({ auth, showToast }) {
   const [users, setUsers] = useState([]);
-  //const [newUser, setNewUser] = useState({ id: nanoid(), editMode: false, email: '', password: '', givenName: '', familyName: '', fullName: '' });
   const [loading, setLoading] = useState(false);
 
   function onDeleteUser(evt, userId) {
@@ -21,12 +20,16 @@ export default function UserList({ auth, showToast }) {
 
   const onFormSubmit = (evt) => {
     evt.preventDefault();
-    const search = evt.target.search.value;
-    axios.get(`${import.meta.env.VITE_API_URL}/api/users/list`, { withCredentials: true, params: { keywords: search } })
+    const keywords = evt.target.keywords.value;
+    const minAge = evt.target.minAge.value;
+    const maxAge = evt.target.maxAge.value;
+    const role = evt.target.role.value;
+    const sortBy = evt.target.sortBy.value;
+    axios.get(`${import.meta.env.VITE_API_URL}/api/users/list`, { withCredentials: true, params: { keywords, minAge, maxAge, role, sortBy } })
       .then(response => {
         console.log('Searching users');
         if (response.data.length === 0) {
-          showToast('No users found', 'info');
+          showToast('No users found', 'error');
           return;
         }
         setUsers(response.data);
@@ -66,21 +69,21 @@ export default function UserList({ auth, showToast }) {
             <form onSubmit={(evt) => onFormSubmit(evt)}>
               <div className="form-group input-group">
                 <button className="btn btn-success" type="submit" id="button-addon1">Search</button>
-                <input type="text" className="form-control" placeholder="Keywords" />
+                <input type="text" className="form-control" placeholder="Keywords" id="keywords" />
               </div>
               <div className="form-group row mt-2">
                 <div className="d-flex flex-column col">
                   <label className="form-label">Min Age:</label>
-                  <input type="number" className="form-control" id="minAge" name="minAge" min={0} placeholder="0" />
+                  <input type="number" className="form-control" id="minAge" name="minAge" min={0} />
                 </div>
                 <div className="d-flex flex-column col">
                   <label className="form-label">Max Age:</label>
-                  <input type="number" className="form-control" id="maxAge" name="maxAge" min={0} placeholder="0" />
+                  <input type="number" className="form-control" id="maxAge" name="maxAge" min={0} />
                 </div>
                 <div className="d-flex flex-column col">
                   <label className="form-label mx-3">Role:</label>
-                  <select className="form-select mx-3">
-                    <option className='form-select'>Any</option>
+                  <select className="form-select mx-3" id='role'>
+                    <option className='form-select' value="">Any</option>
                     <option className='form-select' value="Developer">Developer</option>
                     <option className='form-select' value="Business Analyst">Business Analyst</option>
                     <option className='form-select' value="Technical Manager">Technical Manager</option>
@@ -90,7 +93,7 @@ export default function UserList({ auth, showToast }) {
                 </div>
                 <div className="d-flex flex-column col">
                   <label className="form-label mx-3">Sort by:</label>
-                  <select className="form-select mx-3">
+                  <select className="form-select mx-3" id='sortBy'>
                     <option className='form-select' value="givenName">Given Name</option>
                     <option className='form-select' value="familyName">Family Name</option>
                     <option className='form-select' value="role">Role</option>
