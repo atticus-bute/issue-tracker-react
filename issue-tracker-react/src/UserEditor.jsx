@@ -9,7 +9,7 @@ export default function UserEditor({ showToast }) {
   const [familyName, setFamilyName] = useState('');
   const [fullName, setFullName] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState([]);
+  const [roles, setRoles] = useState([]);
 
   function onUserUpdate(evt) {
     evt.preventDefault();
@@ -18,7 +18,7 @@ export default function UserEditor({ showToast }) {
       familyName: familyName,
       fullName: fullName,
       password: password,
-      role: role
+      role: roles
     }
     axios.put(`${import.meta.env.VITE_API_URL}/api/users/${userId}`,
       { ...updatedUser },
@@ -42,6 +42,12 @@ export default function UserEditor({ showToast }) {
         }
       });
   }
+  const handleRoleChange = (roleName) => {
+    const updatedRoles = roles.includes(roleName)
+      ? roles.filter(role => role !== roleName)
+      : [...roles, roleName];
+    setRoles(updatedRoles);
+  };
 
   useEffect(() => {
     axios.get(`${import.meta.env.VITE_API_URL}/api/users/${userId}`, { withCredentials: true })
@@ -51,7 +57,7 @@ export default function UserEditor({ showToast }) {
         setFamilyName(response.data.familyName);
         setFullName(response.data.fullName);
         setPassword(response.data.password);
-        setRole(response.data.role);
+        setRoles(response.data.role);
       })
       .catch(error => { console.log(error) });
   }, []);
@@ -70,7 +76,7 @@ export default function UserEditor({ showToast }) {
               <label htmlFor="txtUserFullName" className='form-label'>Full Name:</label>
               <input type="text" className='form-control' name='txtUserFullName' value={fullName} onChange={(evt) => setFullName(evt.target.value)} />
               <label htmlFor="txtUserPassword" className='form-label'>Password:</label>
-              <input type="password" className='form-control' name='txtUserPassword' value={password} onChange={(evt) => setPassword(evt.target.value)} />
+              <input type="password" className='form-control' name='txtUserPassword' onChange={(evt) => setPassword(evt.target.value)} />
               <Link to={`/user/${user._id}`} className='mt-1 mx-1 btn btn-danger'>Back</Link>
               <button type='submit' className='mt-1 btn btn-success'>Save User</button>
             </form>
@@ -79,26 +85,21 @@ export default function UserEditor({ showToast }) {
         <div className='col-4'>
           <form className="card card-body my-1 p-0">
             <div className="card-header">User Roles:</div>
-            <div className="form-check form-switch m-2">
-              <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckRole1"/>
-                <label className="form-check-label" htmlFor="flexSwitchCheckRole1">Developer</label>
-            </div>
-            <div className="form-check form-switch m-2">
-              <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckRole2"/>
-                <label className="form-check-label" htmlFor="flexSwitchCheckRole2">Business Analyst</label>
-            </div>
-            <div className="form-check form-switch m-2">
-              <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckRole3"/>
-                <label className="form-check-label" htmlFor="flexSwitchCheckRole3">Technical Manager</label>
-            </div>
-            <div className="form-check form-switch m-2">
-              <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckRole4"/>
-                <label className="form-check-label" htmlFor="flexSwitchCheckRole4">Quality Analyst</label>
-            </div>
-            <div className="form-check form-switch m-2">
-              <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckRole5"/>
-                <label className="form-check-label" htmlFor="flexSwitchCheckRole5">Product Manager</label>
-            </div>
+            {['Developer', 'Business Analyst', 'Technical Manager', 'Quality Analyst', 'Product Manager'].map((roleName, index) => (
+              <div key={index} className="form-check form-switch m-2">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  role="switch"
+                  id={`flexSwitchCheckRole${index}`}
+                  checked={roles.includes(roleName)}
+                  onChange={() => handleRoleChange(roleName)}
+                />
+                <label className="form-check-label" htmlFor={`flexSwitchCheckRole${index}`}>
+                  {roleName}
+                </label>
+              </div>
+            ))}
           </form>
         </div>
       </div>
