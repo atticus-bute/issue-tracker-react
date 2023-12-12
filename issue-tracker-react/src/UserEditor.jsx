@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-export default function UserEditor({ showToast }) {
+export default function UserEditor({ showToast, auth }) {
   const navigate = useNavigate();
   const { userId } = useParams();
   const [user, setUser] = useState({});
@@ -10,9 +10,18 @@ export default function UserEditor({ showToast }) {
   const [fullName, setFullName] = useState('');
   const [password, setPassword] = useState('');
   const [roles, setRoles] = useState([]);
+  const [myself, setMyself] = useState(false);
 
   function onUserUpdate(evt) {
     evt.preventDefault();
+    if (!givenName || !familyName || !fullName || !password) {
+      showToast('Please fill all fields', 'error');
+      return;
+    }
+    if (password.length < 7) {
+      showToast('Password must be at least 7 characters', 'error');
+      return;
+    }
     const updatedUser = {
       givenName: givenName,
       familyName: familyName,
@@ -56,8 +65,12 @@ export default function UserEditor({ showToast }) {
         setGivenName(response.data.givenName);
         setFamilyName(response.data.familyName);
         setFullName(response.data.fullName);
-        setPassword(response.data.password);
+        setPassword('');
         setRoles(response.data.role);
+        if (response.data._id === auth._id) {
+          setMyself(true);
+          console.log('my bug');
+        }
       })
       .catch(error => { console.log(error) });
   }, []);
@@ -68,6 +81,7 @@ export default function UserEditor({ showToast }) {
         <div className='col-1'></div>
         <div className="card col-6 m-1">
           <div className="card-body">
+            <h1>{myself.toString()}</h1>
             <form onSubmit={(evt) => onUserUpdate(evt)}>
               <label htmlFor="txtUserGivenName" className='form-label'>Given Name:</label>
               <input type="text" className='form-control' name='txtUserGivenName' value={givenName} onChange={(evt) => setGivenName(evt.target.value)} />

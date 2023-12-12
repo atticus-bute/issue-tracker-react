@@ -5,7 +5,7 @@ export default function NavBar({ auth, onLogout, reloadTick, setReloadTick }) {
   function onClickLogout(evt) {
     evt.preventDefault();
     axios.post(`${import.meta.env.VITE_API_URL}/api/users/logout`, {}, { withCredentials: true })
-      .then(response => {
+      .then(() => {
         onLogout();
       })
       .catch(error => {
@@ -51,7 +51,7 @@ export default function NavBar({ auth, onLogout, reloadTick, setReloadTick }) {
                 <>
                   <div className="d-flex">
                     <li className="nav-item">
-                      <NavLink className="nav-link" onClick={()=>setReloadTick(reloadTick+1)} to={`/user/${auth._id}`} >{auth.email}</NavLink>
+                      <NavLink className="nav-link" onClick={()=>setReloadTick(reloadTick+1)} to={`/user/me`} >{auth.email}</NavLink>
                     </li>
                     <li className="nav-item">
                       <button className="nav-link" to="/logout" onClick={(evt) => onClickLogout(evt)}>Logout</button>

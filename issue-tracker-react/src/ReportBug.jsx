@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-export default function ReportBug({showToast}) {
+export default function ReportBug({ showToast, auth }) {
   const navigate = useNavigate();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -11,18 +11,17 @@ export default function ReportBug({showToast}) {
   const descriptionError = !description ? 'Description is required' : '';
   const stepsToReproduceError = !stepsToReproduce ? 'Steps to reproduce are required' : '';
 
-  function onReportBug(evt)
-  {
+  function onReportBug(evt) {
     setError('');
     evt.preventDefault();
     if (titleError) {
-      showToast( titleError, 'error');
+      showToast(titleError, 'error');
       return;
     } else if (descriptionError) {
-      showToast( descriptionError, 'error');
+      showToast(descriptionError, 'error');
       return;
     } else if (stepsToReproduceError) {
-      showToast( stepsToReproduceError, 'error');
+      showToast(stepsToReproduceError, 'error');
       return;
     }
     axios.post(`${import.meta.env.VITE_API_URL}/api/bugs/new`, {
@@ -55,6 +54,7 @@ export default function ReportBug({showToast}) {
   return (
     <>
       <div className='row'>
+      {auth?.role.length > 0 ? <>
         <div className='col-3'></div>
         <div className="card col-6 m-1">
           <div className="card-body">
@@ -70,6 +70,7 @@ export default function ReportBug({showToast}) {
           </div>
         </div>
         <div className='col-3'></div>
+        </> : <h2 className='display-3'>You need permission to report a bug.</h2>}
       </div>
     </>
   );

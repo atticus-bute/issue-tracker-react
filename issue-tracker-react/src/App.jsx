@@ -16,6 +16,7 @@ import BugSummary from './BugSummary.jsx';
 import BugEditor from './BugEditor.jsx';
 import UserEditor from './UserEditor.jsx';
 import UserSummary from './UserSummary.jsx';
+import MyUserSummary from './MyUserSummary.jsx';
 
 function App() {
   const [auth, setAuth] = useState(null);
@@ -90,11 +91,12 @@ function App() {
           <Route path="/users" element={<UserList auth={auth} showToast={showToast} />} />
           <Route path="/login" element={<LoginForm onLogin={onLogin} />} />
           <Route path="/register" element={<RegisterForm onLogin={onLogin} showToast={showToast} />} />
-          <Route path="/bug/report" element={<ReportBug showToast={showToast} />} />
+          <Route path="/bug/report" element={<ReportBug showToast={showToast} auth={auth} />} />
           <Route path="/bug/:bugId" element={<BugSummary reloadTick={reloadTick} setReloadTick={setReloadTick} auth={auth} showToast={showToast} />} />
           <Route path="/user/:userId" element={<UserSummary reloadTick={reloadTick} setReloadTick={setReloadTick} showToast={showToast} />} />
-          <Route path="/bug/:bugId/edit" element={<BugEditor showToast={showToast} />} />
-          <Route path="/user/:userId/edit" element={<UserEditor showToast={showToast} />} />
+          <Route path="/user/me" element={<MyUserSummary showToast={showToast} reloadTick={reloadTick} auth={auth}/>} />
+          <Route path="/bug/:bugId/edit" element={<BugEditor showToast={showToast} auth={auth} />} />
+          <Route path="/user/:userId/edit" element={<UserEditor showToast={showToast} auth={auth} />} />
         </Routes>
         <ToastContainer />
       </main>

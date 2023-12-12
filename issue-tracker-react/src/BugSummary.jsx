@@ -42,8 +42,9 @@ export default function BugSummary({auth, showToast, reloadTick, setReloadTick})
         <div className="card-body">
           <h5 className="card-title fw-bold fst-italic">{bug.title}</h5>
           <h6 className="card-subtitle text-body-secondary">{bug.description}</h6>
-          <span className={bug.classification === 'unclassified' ? 'badge bg-warning' : bug.classification === 'unapproved' ? 'badge bg-danger' : bug.classification === 'duplicate' ? 'badge bg-danger' : 'badge bg-success'}>{bug.classification}</span>
-          <span className={bug.closed == true ? 'badge bg-success mx-2' : 'badge bg-danger mx-2'}>{bug.closed ? 'closed' : 'open'}</span>
+          <span className={bug.classification === 'unclassified' ? 'badge bg-warning mx-1' : bug.classification === 'unapproved' ? 'badge bg-danger mx-1' : bug.classification === 'duplicate' ? 'badge bg-danger mx-1' : 'badge bg-success mx-1'}>{bug.classification}</span>
+          <span className={bug.closed == true ? 'badge bg-success mx-1' : 'badge bg-danger mx-1'}>{bug.closed ? 'closed' : 'open'}</span>
+          {bug.assignedToUserName && <span className='badge bg-warning mx-1'>{bug.assignedToUserName}</span>}
           <p className="card-text mt-3">{bug.stepsToReproduce}</p>
         </div>
         <div className='card-footer'>

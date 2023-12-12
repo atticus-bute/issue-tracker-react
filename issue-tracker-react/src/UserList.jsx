@@ -57,6 +57,7 @@ export default function UserList({ auth, showToast }) {
   return (
     <>
       <div className='container'>
+      {auth?.role.length > 0 ? <>
         {loading && <div className="spinner-border text-success" role="status">
           <span className="visually-hidden">Loading...</span>
         </div>}
@@ -121,6 +122,7 @@ export default function UserList({ auth, showToast }) {
             </div>
           </>
         }
+        </> : <h2 className='display-3'>You need permission to view this page.</h2>}
       </div>
     </>
   )
