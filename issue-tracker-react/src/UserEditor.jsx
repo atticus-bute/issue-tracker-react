@@ -67,6 +67,7 @@ export default function UserEditor({ showToast, auth }) {
         setFullName(response.data.fullName);
         setPassword('');
         setRoles(response.data.role);
+        setMyself(false);
         if (response.data._id === auth._id) {
           setMyself(true);
           console.log('my bug');
@@ -81,7 +82,6 @@ export default function UserEditor({ showToast, auth }) {
         <div className='col-1'></div>
         <div className="card col-6 m-1">
           <div className="card-body">
-            <h1>{myself.toString()}</h1>
             <form onSubmit={(evt) => onUserUpdate(evt)}>
               <label htmlFor="txtUserGivenName" className='form-label'>Given Name:</label>
               <input type="text" className='form-control' name='txtUserGivenName' value={givenName} onChange={(evt) => setGivenName(evt.target.value)} />
@@ -97,9 +97,9 @@ export default function UserEditor({ showToast, auth }) {
           </div>
         </div>
         <div className='col-4'>
-          <form className="card card-body my-1 p-0">
+          <form className="card card-body my-1 p-0 disabled">
             <div className="card-header">User Roles:</div>
-            {['Developer', 'Business Analyst', 'Technical Manager', 'Quality Analyst', 'Product Manager'].map((roleName, index) => (
+            {['Developer', 'Quality Analyst', 'Business Analyst', 'Product Manager', 'Technical Manager'].map((roleName, index) => (
               <div key={index} className="form-check form-switch m-2">
                 <input
                   className="form-check-input"
@@ -108,6 +108,7 @@ export default function UserEditor({ showToast, auth }) {
                   id={`flexSwitchCheckRole${index}`}
                   checked={roles.includes(roleName)}
                   onChange={() => handleRoleChange(roleName)}
+                  disabled={!auth?.role.includes('Technical Manager')}
                 />
                 <label className="form-check-label" htmlFor={`flexSwitchCheckRole${index}`}>
                   {roleName}

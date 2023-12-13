@@ -7,6 +7,7 @@ export default function BugSummary({auth, showToast, reloadTick, setReloadTick})
   const navigate = useNavigate();
   const [bug, setBug] = useState({});
   const [newComment, setNewComment] = useState('');
+  const [myBug, setMyBug] = useState(false);
 
   function onAddComment(evt) {
     evt.preventDefault();
@@ -31,6 +32,12 @@ export default function BugSummary({auth, showToast, reloadTick, setReloadTick})
     axios.get(`${import.meta.env.VITE_API_URL}/api/bugs/${bugId}`, { withCredentials: true })
       .then(response => {
         setBug(response.data);
+        setMyBug(false);
+        console.log(response.data.createdBy);
+        if (response.data.createdBy._id === auth._id) {
+          setMyBug(true);
+          console.log('my bug');
+        }
       })
       .catch(error => { console.log(error) });
   }, [reloadTick]);
@@ -52,7 +59,7 @@ export default function BugSummary({auth, showToast, reloadTick, setReloadTick})
           <span className="text-body-secondary">Reported {moment(bug.creationDate).fromNow()}</span>
           <br />
           <Link className='mt-3 btn btn-small mx-2 btn-danger' to='/bugs'>Back</Link>
-          <Link className='mt-3 btn btn-small btn-warning' to={`/bug/${bugId}/edit`} >Edit</Link>
+          {auth?.role.includes('Technical Manager') ? <Link className='mt-3 btn btn-small btn-warning' to={`/bug/${bugId}/edit`} >Edit</Link> : myBug ? <Link className='mt-3 btn btn-small btn-warning' to={`/bug/${bugId}/edit`} >Edit</Link> : <Link className='mt-3 btn btn-small btn-warning disabled' to={`/bug/${bugId}/edit`} >Edit</Link>}
         </div>
       </div>
       <div className="col-4"></div>

@@ -8,16 +8,6 @@ export default function UserList({ auth, showToast }) {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  function onDeleteUser(evt, userId) {
-    // evt.preventDefault();
-    axios.delete(`${import.meta.env.VITE_API_URL}/api/users/${userId}`, { withCredentials: true })
-      .then(response => {
-        showToast('User deleted successfully', 'success');
-        console.log(response.data)
-      })
-      .catch(error => console.log(error));
-  }
-
   const onFormSubmit = (evt) => {
     evt.preventDefault();
     const keywords = evt.target.keywords.value;
@@ -110,7 +100,7 @@ export default function UserList({ auth, showToast }) {
                   {user.editMode
                     ?
                     <>
-                      <UserEditor user={user} key={user.id} onDeleteUser={onDeleteUser} />
+                      <UserEditor user={user} key={user.id}/>
                     </>
                     :
                     <div className='col-4'>

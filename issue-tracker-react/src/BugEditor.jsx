@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-export default function BugEditor({ showToast }) {
+export default function BugEditor({ showToast, auth }) {
   const navigate = useNavigate();
   const { bugId } = useParams();
   const [bug, setBug] = useState({});
@@ -128,36 +128,36 @@ export default function BugEditor({ showToast }) {
           <form className='card card-body my-1' onSubmit={(evt) => onClassifyBug(evt)}>
             <label className='form-labe fw-bold' htmlFor="inputGroupSelectClassification">Classification:</label>
             <div className="input-group">
-              <select className="form-select" id="inputGroupSelectClassification" value={classification} onInput={(evt) => setClassification(evt.target.value)}>
+              <select className="form-select" id="inputGroupSelectClassification" disabled={!auth?.role.includes('Business Analyst')} value={classification} onInput={(evt) => setClassification(evt.target.value)}>
                 <option className='form-select' value='unclassified'>Unclassified</option>
                 <option className='form-select' value="approved">Approved</option>
                 <option className='form-select' value="unapproved">Unapproved</option>
                 <option className='form-select' value="duplicate">Duplicate</option>
               </select>
-              <button className="btn btn-outline-success" type="submit">Classify</button>
+              <button className="btn btn-outline-success" type="submit" disabled={!auth?.role.includes('Business Analyst')}>Classify</button>
             </div>
           </form>
           <form className='card card-body my-1' onSubmit={(evt) => onAssignBug(evt)}>
             <label className='form-label fw-bold' htmlFor="inputGroupSelectAssigned">Assigned to:</label>
             <div className="input-group">
-              <select className="form-select" id="inputGroupSelectAssigned" value={assignedUserId} onChange={(evt) => setAssignedUserId(evt.target.value)}>
+              <select className="form-select" id="inputGroupSelectAssigned" disabled={!auth?.role.includes('Business Analyst')} value={assignedUserId} onChange={(evt) => setAssignedUserId(evt.target.value)}>
                 {users.map(user => (
                   <option key={user._id} value={user._id}>
                     {user.fullName}
                   </option>
                 ))}
               </select>
-              <button className="btn btn-outline-success" type="submit">Assign</button>
+              <button className="btn btn-outline-success" disabled={!auth?.role.includes('Business Analyst')} type="submit">Assign</button>
             </div>
           </form>
           <form className='card card-body my-1' onSubmit={(evt) => onCloseBug(evt)}>
             <label className='form-label fw-bold' htmlFor="inputGroupSelectClosed">Status:</label>
             <div className="input-group">
-              <select className="form-select" id="inputGroupSelectClosed" value={closed} onInput={(evt) => setClosed(evt.target.value)}>
+              <select className="form-select" id="inputGroupSelectClosed" disabled={!auth?.role.includes('Business Analyst')} value={closed} onInput={(evt) => setClosed(evt.target.value)}>
                 <option className='form-select' value='false'>Open</option>
                 <option className='form-select' value='true'>Closed</option>
               </select>
-              <button className="btn btn-outline-success" type="submit">Save</button>
+              <button className="btn btn-outline-success" disabled={!auth?.role.includes('Business Analyst')} type="submit">Save</button>
             </div>
           </form>
         </div>
