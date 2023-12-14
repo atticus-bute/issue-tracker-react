@@ -54,7 +54,6 @@ export default function ReportBug({ showToast, auth }) {
   return (
     <>
       <div className='row'>
-      {auth?.role.length > 0 ? <>
         <div className='col-3'></div>
         <div className="card col-6 m-1">
           <div className="card-body">
@@ -70,7 +69,6 @@ export default function ReportBug({ showToast, auth }) {
           </div>
         </div>
         <div className='col-3'></div>
-        </> : <h2 className='display-3'>You need permission to report a bug.</h2>}
       </div>
     </>
   );

@@ -51,12 +51,12 @@ export default function BugList({ auth, showToast }) {
   return (
     <>
       <div className='container'>
-        {auth?.role.length > 0 ? <>
           {loading && <div className="spinner-border text-success" role="status">
             <span className="visually-hidden">Loading...</span>
           </div>}
+          {!auth?.role.length && <div className="alert alert-info" role="alert">You have no permissions. Only your own bugs will be displayed.</div>}
           {!bugs.length
-            ? <h2 className='display-3'>No bugs found.</h2> :
+            ? <div className='alert alert-danger'>No bugs found.</div> :
             <>
               <span className='display-3 text-dark me-4'>Bug List</span>
               <span className='fs-3 mb-4 badge rounded-circle text-bg-success'>{bugs.length}</span>
@@ -122,7 +122,6 @@ export default function BugList({ auth, showToast }) {
               </div>
             </>
           }
-        </> : <h2 className='display-3'>You need permission to view this page.</h2>}
       </div>
     </>
   )

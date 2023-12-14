@@ -33,7 +33,6 @@ export default function BugSummary({auth, showToast, reloadTick, setReloadTick})
       .then(response => {
         setBug(response.data);
         setMyBug(false);
-        console.log(response.data.createdBy);
         if (response.data.createdBy._id === auth._id) {
           setMyBug(true);
           console.log('my bug');

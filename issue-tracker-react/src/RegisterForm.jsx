@@ -51,14 +51,14 @@ export default function LoginForm({ onLogin, showToast }) {
         .catch(error => {
           const resError = error?.response?.data;
           console.log(resError);
-          showToast(resError.message, 'error');
+          showToast(resError?.message, 'error');
           if (resError) {
             //bad username or password
             console.log(resError);
             if (typeof resError === 'string') {
               showToast(error.response.data, 'error');
-            } else if (resError.message) { //joi validation errors
-              showToast(resError.message.details[0].message, 'error');
+            } else if (resError?.message) { //joi validation errors
+              showToast(resError?.message?.details[0]?.message, 'error');
             }
           }
         });

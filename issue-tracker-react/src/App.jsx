@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import axios from 'axios';
-import { Route, Routes, NavLink, useNavigate } from 'react-router-dom';
+import { Route, Routes, Link, useNavigate } from 'react-router-dom';
 import LoginForm from './LoginForm.jsx';
 import RegisterForm from './RegisterForm.jsx';
 import BugList from './BugList.jsx';
@@ -17,6 +17,7 @@ import BugEditor from './BugEditor.jsx';
 import UserEditor from './UserEditor.jsx';
 import UserSummary from './UserSummary.jsx';
 import MyUserSummary from './MyUserSummary.jsx';
+import MyUserEditor from './MyUserEditor.jsx';
 import NotFound from './NotFound.jsx';
 
 function App() {
@@ -72,7 +73,6 @@ function App() {
     }
     if (currentUser) {
       setAuth(currentUser);
-      console.log(currentUser)
     }
   }, []);
 
@@ -82,11 +82,11 @@ function App() {
         <NavBar auth={auth} onLogout={onLogout} reloadTick={reloadTick} setReloadTick={setReloadTick} />
         {console.log()}
       </header>
-      <main className='flex-grow-1 bg-success-subtle'>
+      <main className='flex-grow-1 bg-success-subtle mb-5'>
         <Routes>
           <Route path="/" element={auth ?
-            <span className='display-5'>Welcome, {auth.fullName}!</span> :
-            <span className='display-5'>Please Login</span>
+            <div className='alert alert-primary fs-3'>Welcome, {auth.fullName}!</div> :
+            <div className='alert alert-warning'><Link to='/login'>Please Login</Link></div>
           } />
           <Route path="/bugs" element={<BugList auth={auth} showToast={showToast} />} />
           <Route path="/users" element={<UserList auth={auth} showToast={showToast} />} />
@@ -96,6 +96,7 @@ function App() {
           <Route path="/bug/:bugId" element={<BugSummary reloadTick={reloadTick} setReloadTick={setReloadTick} auth={auth} showToast={showToast} />} />
           <Route path="/user/:userId" element={<UserSummary reloadTick={reloadTick} setReloadTick={setReloadTick} showToast={showToast} auth={auth} navigate={navigate}/>} />
           <Route path="/user/me" element={<MyUserSummary showToast={showToast} reloadTick={reloadTick} auth={auth}/>} />
+          <Route path="/user/me/edit" element={<MyUserEditor showToast={showToast} auth={auth}/>} />
           <Route path="/bug/:bugId/edit" element={<BugEditor showToast={showToast} auth={auth} />} />
           <Route path="/user/:userId/edit" element={<UserEditor showToast={showToast} auth={auth} />} />
           <Route path="*" element={<NotFound/>} />

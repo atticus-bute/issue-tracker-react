@@ -112,7 +112,7 @@ export default function UserList({ auth, showToast }) {
             </div>
           </>
         }
-        </> : <h2 className='display-3'>You need permission to view this page.</h2>}
+        </> : <div className='alert alert-danger'>You need permission to view this page.</div>}
       </div>
     </>
   )

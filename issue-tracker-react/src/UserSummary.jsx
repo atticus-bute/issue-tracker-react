@@ -52,7 +52,7 @@ export default function UserSummary({ showToast, reloadTick, setReloadTick, auth
           <span className="text-body-secondary">Registered {moment(user.creationDate).fromNow()}</span>
           <br />
           <Link className='mt-3 btn btn-small mx-2 btn-danger' to='/users'>Back</Link>
-          {auth?.role.includes('Technical Manager') ? <Link className='mt-3 btn btn-small btn-warning' to={`/user/${userId}/edit`} >Edit</Link> : myself ? <Link className='mt-3 btn btn-small btn-warning' to={`/user/${userId}/edit`} >Edit</Link> : <Link className='mt-3 btn btn-small btn-warning disabled' to={`/user/${userId}/edit`} >Edit</Link>}
+          {auth?.role.includes('Technical Manager') ? <Link className='mt-3 btn btn-small btn-warning' to={`/user/${userId}/edit`} >Edit</Link> : myself ? <Link className='mt-3 btn btn-small btn-warning' to={`/user/me/edit`} >Edit</Link> : <Link className='mt-3 btn btn-small btn-warning disabled' to={`/user/me/edit`} >Edit</Link>}
           {auth?.role.includes('Technical Manager') && <Link className='mt-3 btn btn-small mx-2 btn-outline-danger' data-bs-toggle="modal" data-bs-target="#deleteModal">Delete User</Link>}
         </div>
         <div className="modal fade" id="deleteModal" tabIndex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">

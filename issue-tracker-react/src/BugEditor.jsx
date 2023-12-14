@@ -12,6 +12,7 @@ export default function BugEditor({ showToast, auth }) {
   const [assignedUserId, setAssignedUserId] = useState();
   const [closed, setClosed] = useState();
   const [users, setUsers] = useState([]);
+  const [myBug, setMyBug] = useState(false);
 
   function onBugUpdate(evt) {
     evt.preventDefault();
@@ -94,7 +95,11 @@ export default function BugEditor({ showToast, auth }) {
           setAssignedUserId(response.data.assignedToUserId);
         }
         setClosed(response.data.closed);
-        console.log(assignedUserId);
+        setMyBug(false);
+        if (response.data.createdBy._id === auth._id) {
+          setMyBug(true);
+          console.log('my bug');
+        }
       })
       .catch(error => { console.log(error) });
     axios.get(`${import.meta.env.VITE_API_URL}/api/users/list`, { withCredentials: true })

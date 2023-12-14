@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-export default function UserEditor({ showToast, auth }) {
+export default function MyUserEditor({ showToast, auth }) {
   const navigate = useNavigate();
-  const { userId } = useParams();
   const [user, setUser] = useState({});
   const [givenName, setGivenName] = useState('');
   const [familyName, setFamilyName] = useState('');
@@ -29,12 +28,12 @@ export default function UserEditor({ showToast, auth }) {
       password: password,
       role: roles
     }
-    axios.put(`${import.meta.env.VITE_API_URL}/api/users/${userId}`,
+    axios.put(`${import.meta.env.VITE_API_URL}/api/users/me`,
       { ...updatedUser },
       { withCredentials: true })
       .then(response => {
         console.log(response.data);
-        navigate(`/user/${userId}`);
+        navigate(`/user/me`);
       })
       .catch(error => {
         console.log(error)
@@ -59,7 +58,7 @@ export default function UserEditor({ showToast, auth }) {
   };
 
   useEffect(() => {
-    axios.get(`${import.meta.env.VITE_API_URL}/api/users/${userId}`, { withCredentials: true })
+    axios.get(`${import.meta.env.VITE_API_URL}/api/users/me`, { withCredentials: true })
       .then(response => {
         setUser(response.data);
         setGivenName(response.data.givenName);

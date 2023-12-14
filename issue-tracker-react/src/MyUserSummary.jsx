@@ -33,8 +33,8 @@ export default function MyUserSummary({ showToast, reloadTick, auth }) {
         <div className='card-footer'>
           <span className="text-body-secondary">Registered {moment(user.creationDate).fromNow()}</span>
           <br />
-            <Link className='mt-3 btn btn-small mx-2 btn-danger' to='/users'>Back</Link>
-            <Link className='mt-3 btn btn-small btn-warning' to={`/user/${auth?._id}/edit`} >Edit</Link>
+            <Link className='mt-3 btn btn-small mx-2 btn-info' to='/users'>All Users</Link>
+            <Link className='mt-3 btn btn-small btn-warning' to={`/user/me/edit`} >Edit</Link>
         </div>
       </div>
       <div className='col-3'></div>
