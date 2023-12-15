@@ -25,6 +25,7 @@ export default function BugSummary({auth, showToast, reloadTick, setReloadTick})
       })
       .catch(error => {
         console.log(error)
+        showToast('Error adding comment', 'error');
       });
       
   }

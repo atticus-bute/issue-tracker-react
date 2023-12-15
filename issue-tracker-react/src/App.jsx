@@ -35,7 +35,7 @@ function App() {
     });
   }
 
-  function onLogin(auth, response) {
+  function onLogin(auth) {
     const now = new Date();
     const numHours = 1;
     const expirationTime = now.getTime() + numHours * 60 * 60 * 1000;
@@ -44,7 +44,6 @@ function App() {
       expiration: expirationTime
     };
     auth.user = user;
-    console.log(`response.data.user: ${JSON.stringify(response.data.user)}`);
     setAuth(user);
     localStorage.setItem('auth', JSON.stringify(user));
     navigate('/bugs');
@@ -59,20 +58,21 @@ function App() {
   }
 
   useEffect(() => {
-    const currentUser = JSON.parse(localStorage.getItem('auth'));
+    const storedUser = JSON.parse(localStorage.getItem('auth'));
     const now = new Date();
-    if (!currentUser) {
+    if (!storedUser) {
       return;
     }
-    if (now.getTime() > currentUser.expiration) {
+
+    if (now.getTime() > storedUser.expiration) {
       axios.post(`${import.meta.env.VITE_API_URL}/api/users/logout`, {}, { withCredentials: true })
         .then(() => {
           onLogout();
         })
       return;
     }
-    if (currentUser) {
-      setAuth(currentUser);
+    if (storedUser) {
+      setAuth(storedUser);
     }
   }, []);
 
@@ -96,9 +96,9 @@ function App() {
           <Route path="/bug/:bugId" element={<BugSummary reloadTick={reloadTick} setReloadTick={setReloadTick} auth={auth} showToast={showToast} />} />
           <Route path="/user/:userId" element={<UserSummary reloadTick={reloadTick} setReloadTick={setReloadTick} showToast={showToast} auth={auth} navigate={navigate}/>} />
           <Route path="/user/me" element={<MyUserSummary showToast={showToast} reloadTick={reloadTick} auth={auth}/>} />
-          <Route path="/user/me/edit" element={<MyUserEditor showToast={showToast} auth={auth}/>} />
+          <Route path="/user/me/edit" element={<MyUserEditor showToast={showToast} auth={auth} setAuth={setAuth}/>} />
           <Route path="/bug/:bugId/edit" element={<BugEditor showToast={showToast} auth={auth} />} />
-          <Route path="/user/:userId/edit" element={<UserEditor showToast={showToast} auth={auth} />} />
+          <Route path="/user/:userId/edit" element={<UserEditor showToast={showToast} auth={auth} setAuth={setAuth}/>} />
           <Route path="*" element={<NotFound/>} />
         </Routes>
         <ToastContainer />

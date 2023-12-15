@@ -96,7 +96,7 @@ export default function BugEditor({ showToast, auth }) {
         }
         setClosed(response.data.closed);
         setMyBug(false);
-        if (response.data.createdBy._id === auth._id) {
+        if (response.data.createdBy?._id === auth?._id) {
           setMyBug(true);
           console.log('my bug');
         }
@@ -124,7 +124,7 @@ export default function BugEditor({ showToast, auth }) {
               <input type="text" className='form-control mb-2' name='txtBugDescription' value={description} onChange={(evt) => setDescription(evt.target.value)} />
               <label htmlFor="txtBugSteps" className='form-label fw-bold'>Steps to Reproduce:</label>
               <input type="text" className='form-control mb-2' name='txtBugSteps' value={stepsToReproduce} onChange={(evt) => setStepsToReproduce(evt.target.value)} />
-              <Link to={`/bug/${bug._id}`} className='mt-1 mx-1 btn btn-danger'>Back</Link>
+              <Link to={`/bug/${bug?._id}`} className='mt-1 mx-1 btn btn-danger'>Back</Link>
               <button type='submit' className='mt-1 btn btn-success'>Save Bug</button>
             </form>
           </div>
@@ -147,7 +147,7 @@ export default function BugEditor({ showToast, auth }) {
             <div className="input-group">
               <select className="form-select" id="inputGroupSelectAssigned" disabled={!auth?.role.includes('Business Analyst')} value={assignedUserId} onChange={(evt) => setAssignedUserId(evt.target.value)}>
                 {users.map(user => (
-                  <option key={user._id} value={user._id}>
+                  <option key={user?._id} value={user?._id}>
                     {user.fullName}
                   </option>
                 ))}

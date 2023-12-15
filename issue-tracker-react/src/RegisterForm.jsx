@@ -46,7 +46,7 @@ export default function LoginForm({ onLogin, showToast }) {
         email, password, givenName, familyName
       }, { withCredentials: true })
         .then(response => {
-          onLogin(response.data, response);
+          onLogin(response.data);
         })
         .catch(error => {
           const resError = error?.response?.data;
@@ -88,4 +88,4 @@ export default function LoginForm({ onLogin, showToast }) {
       </div>
     </>
   );
-};
+}

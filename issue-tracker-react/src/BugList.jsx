@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { nanoid } from 'nanoid';
 import BugListItem from './BugListItem.jsx';
 import BugEditor from './BugEditor.jsx';
 import axios from 'axios';
@@ -59,12 +58,12 @@ export default function BugList({ auth, showToast }) {
             ? <div className='alert alert-danger'>No bugs found.</div> :
             <>
               <span className='display-3 text-dark me-4'>Bug List</span>
-              <span className='fs-3 mb-4 badge rounded-circle text-bg-success'>{bugs.length}</span>
+              <span className='fs-5 mb-4 badge rounded-pill text-bg-success'>{bugs.length} documents returned</span>
               <br />
               <form onSubmit={(evt) => onFormSubmit(evt)}>
                 <div className="form-group input-group">
                   <button className="btn btn-success" type="submit" id="button-addon1">Search</button>
-                  <input type="text" className="form-control" placeholder="Keywords" id='keywords' />
+                  <input type="text" className="form-control" placeholder="Keywords" id='keywords'/>
                 </div>
                 <div className="form-group row mt-2">
                   <div className="d-flex flex-column col">

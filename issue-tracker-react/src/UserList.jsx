@@ -1,4 +1,3 @@
-import { nanoid } from 'nanoid';
 import { useState, useEffect } from 'react';
 import UserListItem from './UserListItem.jsx';
 import UserEditor from './UserEditor.jsx';
@@ -55,7 +54,7 @@ export default function UserList({ auth, showToast }) {
           ? <h2 className='display-2'>No users to display</h2> :
           <>
             <span className='display-3 text-dark me-4'>User List</span>
-            <span className='fs-3 mb-4 badge rounded-circle text-bg-success'>{users.length}</span>
+            <span className='fs-5 mb-4 badge rounded-pill text-bg-success'>{users.length} users returned</span>
             <br />
             <form onSubmit={(evt) => onFormSubmit(evt)}>
               <div className="form-group input-group">

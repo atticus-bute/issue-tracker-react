@@ -36,7 +36,7 @@ export default function LoginForm({ onLogin }) {
       email, password
     }, { withCredentials: true })
       .then(response => {
-        onLogin(response.data, response);
+        onLogin(response.data);
       })
       .catch(error => {
         const resError = error?.response?.data;

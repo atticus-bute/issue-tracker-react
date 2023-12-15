@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-export default function MyUserEditor({ showToast, auth }) {
+export default function MyUserEditor({ showToast, auth, setAuth }) {
   const navigate = useNavigate();
   const [user, setUser] = useState({});
   const [givenName, setGivenName] = useState('');
@@ -31,21 +31,34 @@ export default function MyUserEditor({ showToast, auth }) {
     axios.put(`${import.meta.env.VITE_API_URL}/api/users/me`,
       { ...updatedUser },
       { withCredentials: true })
-      .then(response => {
-        console.log(response.data);
+      .then(() => {
+        if (myself) {
+          axios.get(`${import.meta.env.VITE_API_URL}/api/users/me`, { withCredentials: true })
+            .then(getResponse => {
+              const now = new Date();
+              const numHours = 1;
+              const expirationTime = now.getTime() + numHours * 60 * 60 * 1000;
+              const userFinal = {
+                ...getResponse.data,
+                expiration: expirationTime
+              };
+              setAuth(userFinal);
+              localStorage.setItem('auth', JSON.stringify(userFinal));
+            })
+        }
         navigate(`/user/me`);
       })
       .catch(error => {
         console.log(error)
         const resError = error?.response?.data;
         console.log(resError);
-        showToast(resError.message, 'error');
+        showToast(resError?.message, 'error');
         if (resError) {
           console.log(resError);
           if (typeof resError === 'string') {
-            showToast(error.response.data, 'error');
-          } else if (resError.message) { //joi validation errors
-            showToast(resError.message.details[0].message, 'error');
+            showToast(error?.response.data, 'error');
+          } else if (resError?.message) { //joi validation errors
+            showToast(resError?.message.details[0].message, 'error');
           }
         }
       });
