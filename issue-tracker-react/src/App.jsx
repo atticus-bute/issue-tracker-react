@@ -19,6 +19,7 @@ import UserSummary from './UserSummary.jsx';
 import MyUserSummary from './MyUserSummary.jsx';
 import MyUserEditor from './MyUserEditor.jsx';
 import NotFound from './NotFound.jsx';
+import Home from './Home.jsx';
 
 function App() {
   const [auth, setAuth] = useState(null);
@@ -84,10 +85,7 @@ function App() {
       </header>
       <main className='flex-grow-1 bg-success-subtle mb-5'>
         <Routes>
-          <Route path="/" element={auth ?
-            <div className='alert alert-primary fs-3'>Welcome, {auth.fullName}!</div> :
-            <div className='alert alert-warning'><Link to='/login'>Please Login</Link></div>
-          } />
+          <Route path="/" element={<Home auth={auth}/>} />
           <Route path="/bugs" element={<BugList auth={auth} showToast={showToast} />} />
           <Route path="/users" element={<UserList auth={auth} showToast={showToast} />} />
           <Route path="/login" element={<LoginForm onLogin={onLogin} />} />

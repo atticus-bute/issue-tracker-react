@@ -41,14 +41,14 @@ export default function LoginForm({ onLogin }) {
       .catch(error => {
         const resError = error?.response?.data;
         console.log(resError);
-        setError(resError.message);
+        setError(resError?.message);
         if (resError) {
           //bad username or password
           console.log(resError);
           if (typeof resError === 'string') {
             setError(error.response.data);
-          } else if (resError.message) { //joi validation errors
-            setError(resError.message.details[0].message)
+          } else if (resError?.message) { //joi validation errors
+            setError(resError?.message.details[0]?.message)
           }
         }
       });

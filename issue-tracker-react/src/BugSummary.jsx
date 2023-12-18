@@ -38,6 +38,10 @@ export default function BugSummary({auth, showToast, reloadTick, setReloadTick})
           setMyBug(true);
           console.log('my bug');
         }
+        if(response.data.assignedToUserId === auth._id) {
+          setMyBug(true);
+          console.log('my bug');
+        }
       })
       .catch(error => { console.log(error) });
   }, [reloadTick]);

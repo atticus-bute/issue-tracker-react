@@ -36,6 +36,7 @@ export default function BugList({ auth, showToast }) {
     axios.get(`${import.meta.env.VITE_API_URL}/api/bugs/list`, { withCredentials: true, params: { closed } })
       .then(response => {
         console.log('Getting bugs');
+        console.log(response.data);
         setBugs(response.data);
       })
       .catch(error => {
